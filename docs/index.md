@@ -1,0 +1,41 @@
+# Convert to Comic Book
+
+欢迎使用 Convert to Comic Book (CCB)！
+
+CCB 是一个强大的命令行工具，用于将图片文件夹或压缩包转换为漫画书格式（CBZ、CBR、CB7、CBT）。
+
+## 主要特性
+
+- 🔄 **多格式支持**: 支持文件夹、CBZ、CBR、CB7、CBT、ZIP、RAR、7Z、TAR 之间的相互转换
+- 🚀 **高性能**: 使用异步处理，支持批量转换
+- 📦 **灵活配置**: 支持递归处理、收集模式、自定义输出等
+- 🛡️ **安全可靠**: 完善的错误处理和日志记录
+- 🌍 **跨平台**: 支持 Windows、Linux、macOS
+
+## 快速开始
+
+```bash
+# 安装
+uv tool install ccb
+
+# 转换文件夹为 CBZ
+ccb /path/to/your/folder
+
+# 批量转换
+ccb -r -t cbr /path/to/your/folders
+
+# 收集并转换压缩包
+ccb -c -r /path/to/your/folders
+```
+
+## 文档导航
+
+- [快速开始](getting-started/installation.md) - 安装和基本使用
+- [用户指南](user-guide/command-line.md) - 详细的使用说明
+- [开发文档](development/architecture.md) - 架构设计和 API 参考
+- [贡献指南](contributing.md) - 如何参与项目
+
+## 许可证
+
+本项目使用 [MIT License](../LICENSE) 开源协议。
+
