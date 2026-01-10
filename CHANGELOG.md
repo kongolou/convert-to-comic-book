@@ -8,34 +8,6 @@
 - 新增`package-dir = {"" = "src"}`配置，支持src布局
 - 修复Hatchling构建配置，将`packages = ["src/ccb"]`改为`sources = ["src"]`
 
-## [2.0.6] - 2026-01-10
-### Updated
-- 修复`pyproject.toml`文件中的`[project.scripts]`为`ccb = "ccb.cli:main"`
-
-## [2.0.5] - 2026-01-10
-### Deleted
-- 移除`__main__.py`
-
-### Updated
-- 修复`pyproject.toml`文件中的`[project.scripts]`为`ccb = "src.ccb:main"`
-- 修复`cli.py`
-
-## [2.0.3] - 2026-01-10
-
-### Updated
-- 更新`pyproject.toml`文件中的`[project.scripts]`为`ccb = "ccb.__main__"`
-- 更新`cli.py`
-
-## [2.0.2] - 2026-01-10
-
-### Updated
-- 修复`__main__.py`文件中的引用
-
-## [2.0.1] - 2026-01-10
-
-### Added
-- 加入`__main__.py`文件
-
 ## [2.0.0] - 2026-01-08
 
 ### Deleted

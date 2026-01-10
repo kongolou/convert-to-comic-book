@@ -88,7 +88,7 @@ ccb [可选参数] <源列表>
   -f, --from-type {auto,folder,cbz,cbr,cb7,cbt,zip,rar,7z,tar}       
                         指定源类型，默认为`auto`
   -t, --to-type {folder,cbz,cbr,cb7,cbt}         
-                        指定目标类型，默认为`cbz`（与`from-type`类型一致的源将不参与任何执行）
+                        指定目标类型，默认为`cbz`（与`to-type`类型一致的源将不参与任何执行）
   -o, --output-dir OUTPUT_DIR
                         重定向导出目录（默认行为是导出到源所在目录）
   -c, --collect         搜集源列表中所有的叶文件或不含叶文件的叶目录，并作为新的源列表
