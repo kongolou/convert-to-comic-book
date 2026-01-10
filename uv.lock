@@ -214,10 +214,15 @@ wheels = [
 
 [[package]]
 name = "ccb"
-version = "1.0.4"
+version = "2.0.0"
 source = { editable = "." }
 
 [package.optional-dependencies]
+docs = [
+    { name = "mkdocs" },
+    { name = "mkdocs-material" },
+    { name = "mkdocstrings", extra = ["python"] },
+]
 full = [
     { name = "py7zr" },
     { name = "rarfile" },
@@ -235,10 +240,13 @@ docs = [
 
 [package.metadata]
 requires-dist = [
+    { name = "mkdocs", marker = "extra == 'docs'", specifier = ">=1.5.0" },
+    { name = "mkdocs-material", marker = "extra == 'docs'", specifier = ">=9.0.0" },
+    { name = "mkdocstrings", extras = ["python"], marker = "extra == 'docs'", specifier = ">=0.24.0" },
     { name = "py7zr", marker = "extra == 'full'", specifier = ">=0.21.0" },
     { name = "rarfile", marker = "extra == 'full'", specifier = ">=4.0" },
 ]
-provides-extras = ["standard", "full"]
+provides-extras = ["standard", "full", "docs"]
 
 [package.metadata.requires-dev]
 dev = [{ name = "pytest", specifier = ">=9.0.2" }]
