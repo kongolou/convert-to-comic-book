@@ -822,49 +822,10 @@
   <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        组合使用
+        带空格的路径（引号）
       
     </span>
   </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        路径处理
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="路径处理">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#windows" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Windows 路径
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        多个路径
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1325,49 +1286,10 @@
   <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        组合使用
+        带空格的路径（引号）
       
     </span>
   </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        路径处理
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="路径处理">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#windows" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Windows 路径
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        多个路径
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1430,12 +1352,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>ccb<span class="w"> </span>/path/to/folder<span class="w"> </span>-o<span class="w"> </span>/path/to/output
 </code></pre></div></p>
 <h3 id="-c-collect"><code>-c, --collect</code><a class="headerlink" href="#-c-collect" title="Permanent link">&para;</a></h3>
-<p>搜集源列表中所有叶子文件或不含叶子文件的叶子目录，并作为新的源列表。</p>
-<p>在收集模式下，程序会自动查找并转换以下格式：
-- <code>zip</code> → <code>cbz</code>
-- <code>rar</code> → <code>cbr</code>
-- <code>7z</code> → <code>cb7</code>
-- <code>tar</code> → <code>cbt</code></p>
+<p>搜集源列表中所有非<code>to-type</code>类型的叶子文件（或不含叶子文件的叶子目录），并作为新的源列表。</p>
 <p><strong>示例</strong>:
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># 收集当前目录下的压缩包</span>
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>ccb<span class="w"> </span>-c<span class="w"> </span>/path/to/folder
@@ -1464,23 +1381,11 @@
 <p><strong>示例</strong>:
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>ccb<span class="w"> </span>--version
 </code></pre></div></p>
-<h2 id="_6">组合使用<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
-<p>多个选项可以组合使用：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># 收集压缩包，转换为 CBZ，并删除源文件</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>ccb<span class="w"> </span>-c<span class="w"> </span>-t<span class="w"> </span>cbz<span class="w"> </span>-R<span class="w"> </span>/path/to/archives
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c1"># 批量转换，静默模式</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>ccb<span class="w"> </span>-q<span class="w"> </span>/path/to/folders
+<h2 id="_6">带空格的路径（引号）<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<p>在 Windows PowerShell 或其他 shell 中，路径中包含空格时通常需要用引号包裹，例如:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">ccb</span> <span class="s2">&quot;C:\Program Files\My Comic&quot;</span>
 </code></pre></div>
-<h2 id="_7">路径处理<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
-<h3 id="windows">Windows 路径<a class="headerlink" href="#windows" title="Permanent link">&para;</a></h3>
-<p>在 Windows PowerShell 中，包含空格的路径需要用引号包裹：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">ccb</span> <span class="s2">&quot;C:\Users\Username\My Comics\comic folder&quot;</span>
-</code></pre></div>
-<h3 id="_8">多个路径<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
-<p>可以同时指定多个路径：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>ccb<span class="w"> </span>/path/to/folder1<span class="w"> </span>/path/to/folder2<span class="w"> </span>/path/to/folder3
-</code></pre></div>
+<p><code>ccb</code> 会自动处理带引号的路径——在内部会移除路径字符串的引号并正确识别目录或文件。因此你可以放心地在命令行中使用带引号的路径，CLI 的收集与处理逻辑会正确解析它们。</p>
 
 
 

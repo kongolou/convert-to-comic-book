@@ -795,17 +795,6 @@
   <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        收集模式自动映射
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
-    <span class="md-ellipsis">
-      
         格式要求
       
     </span>
@@ -815,7 +804,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#_10" class="md-nav__link">
+  <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
         图片文件夹
@@ -826,7 +815,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_11" class="md-nav__link">
+  <a href="#_10" class="md-nav__link">
     <span class="md-ellipsis">
       
         压缩包
@@ -842,7 +831,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_12" class="md-nav__link">
+  <a href="#_11" class="md-nav__link">
     <span class="md-ellipsis">
       
         依赖要求
@@ -1226,17 +1215,6 @@
   <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        收集模式自动映射
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
-    <span class="md-ellipsis">
-      
         格式要求
       
     </span>
@@ -1246,7 +1224,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#_10" class="md-nav__link">
+  <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
         图片文件夹
@@ -1257,7 +1235,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_11" class="md-nav__link">
+  <a href="#_10" class="md-nav__link">
     <span class="md-ellipsis">
       
         压缩包
@@ -1273,7 +1251,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_12" class="md-nav__link">
+  <a href="#_11" class="md-nav__link">
     <span class="md-ellipsis">
       
         依赖要求
@@ -1389,47 +1367,16 @@
 </tr>
 </tbody>
 </table>
-<h2 id="_8">收集模式自动映射<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
-<p>在收集模式（<code>-c</code>）下，标准压缩格式会自动映射到对应的漫画书格式：</p>
-<table>
-<thead>
-<tr>
-<th>标准格式</th>
-<th>映射为</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>zip</code></td>
-<td><code>cbz</code></td>
-</tr>
-<tr>
-<td><code>rar</code></td>
-<td><code>cbr</code></td>
-</tr>
-<tr>
-<td><code>7z</code></td>
-<td><code>cb7</code></td>
-</tr>
-<tr>
-<td><code>tar</code></td>
-<td><code>cbt</code></td>
-</tr>
-</tbody>
-</table>
-<p>如果同时指定了 <code>-t</code> 参数，则使用指定的输出格式。</p>
-<h2 id="_9">格式要求<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
-<h3 id="_10">图片文件夹<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
+<h2 id="_8">格式要求<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
+<h3 id="_9">图片文件夹<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h3>
 <p>一个好的图片文件夹应该：
-- 仅包含图片文件
-- 可以包含子文件夹（会递归处理）
-- 可以包含可识别的压缩包（在收集模式下）</p>
-<h3 id="_11">压缩包<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h3>
+- 仅包含图片文件</p>
+<h3 id="_10">压缩包<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
 <p>压缩包应该：
 - 包含有效的图片文件
 - 格式正确且未损坏
 - 可以被相应的库正确读取</p>
-<h2 id="_12">依赖要求<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h2>
+<h2 id="_11">依赖要求<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h2>
 <p>某些格式需要额外的依赖库：</p>
 <table>
 <thead>
@@ -1452,6 +1399,7 @@
 </tr>
 </tbody>
 </table>
+<p>其中，用户需要手动安装 <code>WinRAR</code> 专有软件提供外部命令支持 <code>RAR/CBR</code> 格式转换。</p>
 <p>其他格式（ZIP/CBZ, TAR/CBT）使用 Python 标准库，无需额外依赖。</p>
 
 

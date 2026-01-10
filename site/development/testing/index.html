@@ -973,6 +973,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="测试覆盖">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        在 Windows 虚拟环境中运行测试
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1197,6 +1214,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="测试覆盖">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        在 Windows 虚拟环境中运行测试
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1315,7 +1349,7 @@
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>├── test_archive_handler.py    # 压缩/解压处理测试
 <a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>├── test_converter.py          # 核心转换测试
 <a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>├── test_utils.py              # 工具函数测试
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>├── test_cli.py                # CLI 测试
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>├── test_cli.py                # CLI 测试（包含带空格/带引号路径的用例）
 <a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>├── test_cli_recursive.py      # CLI 递归处理测试
 <a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>└── test_cli_combinations.py   # CLI 参数组合测试
 </code></pre></div>
@@ -1326,6 +1360,18 @@
 - 转换逻辑：主要转换路径都有测试
 - 工具函数：所有函数都有测试
 - CLI 接口：基本功能和参数组合测试</p>
+<h3 id="windows">在 Windows 虚拟环境中运行测试<a class="headerlink" href="#windows" title="Permanent link">&para;</a></h3>
+<p>如果你在 Windows 上使用项目自带或推荐的虚拟环境（例如 <code>.venv</code>），可以按如下方式运行测试：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c"># 激活虚拟环境（如果尚未激活）</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="p">&amp;</span> <span class="p">./.</span><span class="n">venv</span><span class="p">/</span><span class="n">Scripts</span><span class="p">/</span><span class="n">Activate</span><span class="p">.</span><span class="n">ps1</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c"># 运行全部测试</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="n">pytest</span> <span class="n">-q</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="c"># 仅运行 CLI 测试</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="n">pytest</span> <span class="n">-q</span> <span class="n">tests</span><span class="p">/</span><span class="n">test_cli</span><span class="p">.</span><span class="n">py</span>
+</code></pre></div>
+<p>测试中包含对 CLI 行为的验证，例如对带空格的路径（在 PowerShell/命令行中常用引号包裹）处理的用例，确保在不同 shell 下路径解析正确。</p>
 <h2 id="_9">编写新测试<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <h3 id="_10">测试文件命名<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
 <p>测试文件应以 <code>test_</code> 开头，例如 <code>test_new_feature.py</code>。</p>
@@ -1334,18 +1380,18 @@
 <h3 id="_12">测试函数命名<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h3>
 <p>测试函数应以 <code>test_</code> 开头，例如 <code>test_new_functionality</code>。</p>
 <h3 id="_13">示例<a class="headerlink" href="#_13" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ccb.converter</span><span class="w"> </span><span class="kn">import</span> <span class="n">ComicBookConverter</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="k">class</span><span class="w"> </span><span class="nc">TestNewFeature</span><span class="p">:</span>
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;新功能测试类&quot;&quot;&quot;</span>
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">test_new_functionality</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;测试新功能&quot;&quot;&quot;</span>
-<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>        <span class="n">converter</span> <span class="o">=</span> <span class="n">ComicBookConverter</span><span class="p">()</span>
-<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>        <span class="c1"># 测试代码</span>
-<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>        <span class="k">assert</span> <span class="kc">True</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ccb.converter</span><span class="w"> </span><span class="kn">import</span> <span class="n">ComicBookConverter</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="k">class</span><span class="w"> </span><span class="nc">TestNewFeature</span><span class="p">:</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;新功能测试类&quot;&quot;&quot;</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">test_new_functionality</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;测试新功能&quot;&quot;&quot;</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>        <span class="n">converter</span> <span class="o">=</span> <span class="n">ComicBookConverter</span><span class="p">()</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>        <span class="c1"># 测试代码</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>        <span class="k">assert</span> <span class="kc">True</span>
 </code></pre></div>
 <h2 id="_14">持续集成<a class="headerlink" href="#_14" title="Permanent link">&para;</a></h2>
 <p>项目使用 GitHub Actions 进行持续集成，自动运行测试。</p>

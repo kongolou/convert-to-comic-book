@@ -33,6 +33,12 @@ full = [
     "py7zr>=0.21.0",
 ]
 
+docs = [
+    "mkdocs>=1.5.0",
+    "mkdocs-material>=9.0.0",
+    "mkdocstrings[python]>=0.24.0",
+]
+
 [project.urls]
 Homepage = "https://github.com/kongolou"
 Documentation = "https://convert-to-comic-book.readthedocs.io"

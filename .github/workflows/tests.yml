@@ -27,7 +27,7 @@ jobs:
         python -m pip install --upgrade pip
         # Install package with optional 'full' extras (rarfile, py7zr)
         pip install -e .[full]
-        pip install pytest coverage
+        pip install pytest coverage pytest-cov
 
     - name: Run tests with coverage
       run: |

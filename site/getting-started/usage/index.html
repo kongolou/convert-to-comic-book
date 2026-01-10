@@ -583,7 +583,7 @@
   <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        收集模式
+        指定输出目录
       
     </span>
   </a>
@@ -594,7 +594,7 @@
   <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        指定输出目录
+        删除源文件
       
     </span>
   </a>
@@ -605,7 +605,7 @@
   <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        删除源文件
+        静默模式
       
     </span>
   </a>
@@ -616,17 +616,6 @@
   <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        静默模式
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
-    <span class="md-ellipsis">
-      
         查看帮助
       
     </span>
@@ -635,7 +624,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_10" class="md-nav__link">
+  <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
         下一步
@@ -1097,7 +1086,7 @@
   <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        收集模式
+        指定输出目录
       
     </span>
   </a>
@@ -1108,7 +1097,7 @@
   <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        指定输出目录
+        删除源文件
       
     </span>
   </a>
@@ -1119,7 +1108,7 @@
   <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        删除源文件
+        静默模式
       
     </span>
   </a>
@@ -1130,17 +1119,6 @@
   <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        静默模式
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
-    <span class="md-ellipsis">
-      
         查看帮助
       
     </span>
@@ -1149,7 +1127,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_10" class="md-nav__link">
+  <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
         下一步
@@ -1181,7 +1159,7 @@
 
 <h1 id="_1">基本使用<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <h2 id="_2">最简单的用法<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<p>转换单个图片文件夹为 CBZ 格式：</p>
+<p>转换单个文件夹为 CBZ 格式：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>ccb<span class="w"> </span>/path/to/your/folder
 </code></pre></div>
 <p>输出文件将保存在同一目录下：<code>/path/to/your/folder.cbz</code></p>
@@ -1197,40 +1175,27 @@
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>ccb<span class="w"> </span>-t<span class="w"> </span>cbt<span class="w"> </span>/path/to/your/folder
 </code></pre></div>
 <h2 id="_4">批量转换<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
-<p>自动处理所有子文件夹：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>ccb<span class="w"> </span>/path/to/your/folders
+<p>使用 <code>-c</code> 参数处理所有子文件夹：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>ccb<span class="w"> </span>-c<span class="w"> </span>/path/to/your/folders
 </code></pre></div>
 <p>这将处理指定目录下的所有子文件夹。</p>
-<h2 id="_5">收集模式<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
-<p>使用 <code>-c</code> 参数启用收集模式，自动查找并转换压缩包：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># 收集当前目录下的压缩包</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>ccb<span class="w"> </span>-c<span class="w"> </span>/path/to/your/folder
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># 收集所有子文件夹中的压缩包</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>ccb<span class="w"> </span>-c<span class="w"> </span>/path/to/your/folders
-</code></pre></div>
-<p>收集模式会自动将标准压缩格式转换为对应的漫画书格式：
-- <code>zip</code> → <code>cbz</code>
-- <code>rar</code> → <code>cbr</code>
-- <code>7z</code> → <code>cb7</code>
-- <code>tar</code> → <code>cbt</code></p>
-<h2 id="_6">指定输出目录<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<h2 id="_5">指定输出目录<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <p>使用 <code>-o</code> 参数指定输出目录：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>ccb<span class="w"> </span>/path/to/folder<span class="w"> </span>-o<span class="w"> </span>/path/to/output
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>ccb<span class="w"> </span>/path/to/input<span class="w"> </span>-o<span class="w"> </span>/path/to/output
 </code></pre></div>
-<h2 id="_7">删除源文件<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<h2 id="_6">删除源文件<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <p>使用 <code>--remove</code> 参数在转换后删除源文件（请谨慎使用）：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>ccb<span class="w"> </span>-f<span class="w"> </span>cb7<span class="w"> </span>-t<span class="w"> </span>cbt<span class="w"> </span>/path/to/comic.cb7<span class="w"> </span>--remove
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>ccb<span class="w"> </span>-t<span class="w"> </span>cbt<span class="w"> </span>/path/to/your/comic.cb7<span class="w"> </span>--remove
 </code></pre></div>
-<h2 id="_8">静默模式<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
+<h2 id="_7">静默模式<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
 <p>使用 <code>-q</code> 参数启用静默模式，仅显示错误和摘要：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>ccb<span class="w"> </span>-q<span class="w"> </span>/path/to/folder
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>ccb<span class="w"> </span>-q<span class="w"> </span>/path/to/your/folder
 </code></pre></div>
-<h2 id="_9">查看帮助<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
+<h2 id="_8">查看帮助<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <p>使用 <code>-h</code> 或 <code>--help</code> 查看完整的帮助信息：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>ccb<span class="w"> </span>-h
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>ccb<span class="w"> </span>-h
 </code></pre></div>
-<h2 id="_10">下一步<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h2>
+<h2 id="_9">下一步<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <p>查看<a href="../examples/">使用示例</a>了解更多高级用法。</p>
 
 

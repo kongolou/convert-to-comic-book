@@ -796,7 +796,7 @@
   <a href="#q_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Q: 如何递归处理子文件夹？
+        Q: 如何处理子文件夹？
       
     </span>
   </a>
@@ -1382,7 +1382,7 @@
   <a href="#q_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Q: 如何递归处理子文件夹？
+        Q: 如何处理子文件夹？
       
     </span>
   </a>
@@ -1695,27 +1695,24 @@
 <p>在 Linux/macOS 中，也可以使用引号：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>ccb<span class="w"> </span><span class="s2">&quot;/path with spaces/folder&quot;</span>
 </code></pre></div>
-<h3 id="q_1">Q: 如何递归处理子文件夹？<a class="headerlink" href="#q_1" title="Permanent link">&para;</a></h3>
-<p>A: 默认情况下会自动递归处理子文件夹：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>ccb<span class="w"> </span>/path/to/folders
+<h3 id="q_1">Q: 如何处理子文件夹？<a class="headerlink" href="#q_1" title="Permanent link">&para;</a></h3>
+<p>A: 使用 <code>-c</code> 参数处理子文件夹：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>ccb<span class="w"> </span>-c<span class="w"> </span>/path/to/folders
 </code></pre></div>
 <h3 id="q_2">Q: 收集模式如何工作？<a class="headerlink" href="#q_2" title="Permanent link">&para;</a></h3>
-<p>A: 使用 <code>-c</code> 参数，程序会自动查找并转换可识别的压缩包：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>ccb<span class="w"> </span>-c<span class="w"> </span>/path/to/folder
-</code></pre></div>
-<p>收集模式默认会递归搜索所有子文件夹：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>ccb<span class="w"> </span>-c<span class="w"> </span>/path/to/folders
-</code></pre></div>
+<p>A: <code>-c</code> 参数的作用是搜集源列表中所有非<code>to-type</code>类型的叶子文件（或不含叶子文件的叶子目录）</p>
 <h3 id="q_3">Q: 如何查看详细日志？<a class="headerlink" href="#q_3" title="Permanent link">&para;</a></h3>
 <p>A: 默认情况下会显示 INFO 级别的日志。使用 <code>-q</code> 参数可以启用静默模式，仅显示错误和摘要。</p>
 <h3 id="q_4">Q: 如何指定输出目录？<a class="headerlink" href="#q_4" title="Permanent link">&para;</a></h3>
 <p>A: 使用 <code>-o</code> 参数：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>ccb<span class="w"> </span>/path/to/folder<span class="w"> </span>-o<span class="w"> </span>/path/to/output
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>ccb<span class="w"> </span>/path/to/folder<span class="w"> </span>-o<span class="w"> </span>/path/to/output
 </code></pre></div>
 <h3 id="q_5">Q: 转换后如何删除源文件？<a class="headerlink" href="#q_5" title="Permanent link">&para;</a></h3>
 <p>A: 使用 <code>--remove</code> 参数（请谨慎使用）：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>ccb<span class="w"> </span>--remove<span class="w"> </span>/path/to/folder
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>ccb<span class="w"> </span>--remove<span class="w"> </span>/path/to/folder
 </code></pre></div>
+<p>注意这将删除源列表中的所有源。</p>
+<p>如果不想删除整个文件夹，只需要定点清除，请阅读并使用 <code>-c</code> 参数。</p>
 <h2 id="_4">格式相关<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <h3 id="q_6">Q: 支持哪些输入格式？<a class="headerlink" href="#q_6" title="Permanent link">&para;</a></h3>
 <p>A: 支持文件夹、CBZ、CBR、CB7、CBT、ZIP、RAR、7Z、TAR。</p>
@@ -1723,11 +1720,12 @@
 <p>A: 支持文件夹、CBZ、CBR、CB7、CBT。</p>
 <h3 id="q-rar">Q: 为什么无法处理 RAR 文件？<a class="headerlink" href="#q-rar" title="Permanent link">&para;</a></h3>
 <p>A: RAR 格式需要 <code>rarfile</code> 库。请安装完整版本：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>uv<span class="w"> </span>tool<span class="w"> </span>install<span class="w"> </span>ccb<span class="o">[</span>full<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>uv<span class="w"> </span>tool<span class="w"> </span>install<span class="w"> </span>ccb<span class="o">[</span>full<span class="o">]</span>
 </code></pre></div>
+<p><strong>注意：用户需要手动安装 <code>WinRAR</code> 专有软件提供外部命令支持。</strong></p>
 <h3 id="q-7z">Q: 为什么无法处理 7Z 文件？<a class="headerlink" href="#q-7z" title="Permanent link">&para;</a></h3>
 <p>A: 7Z 格式需要 <code>py7zr</code> 库。请安装完整版本：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>uv<span class="w"> </span>tool<span class="w"> </span>install<span class="w"> </span>ccb<span class="o">[</span>full<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>uv<span class="w"> </span>tool<span class="w"> </span>install<span class="w"> </span>ccb<span class="o">[</span>full<span class="o">]</span>
 </code></pre></div>
 <h2 id="_5">错误处理<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <h3 id="q-path-does-not-exist">Q: 遇到 "Path does not exist" 错误？<a class="headerlink" href="#q-path-does-not-exist" title="Permanent link">&para;</a></h3>
@@ -1749,19 +1747,19 @@
 - 考虑分批处理</p>
 <h3 id="q_10">Q: 如何批量处理多个文件？<a class="headerlink" href="#q_10" title="Permanent link">&para;</a></h3>
 <p>A: 可以同时指定多个路径：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>ccb<span class="w"> </span>/path/to/folder1<span class="w"> </span>/path/to/folder2<span class="w"> </span>/path/to/folder3
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>ccb<span class="w"> </span>/path/to/folder1<span class="w"> </span>/path/to/folder2<span class="w"> </span>/path/to/folder3
 </code></pre></div>
-<p>或使用默认的递归模式：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>ccb<span class="w"> </span>/path/to/parent/folder
+<p>或使用 <code>-c</code> 参数：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>ccb<span class="w"> </span>-c<span class="w"> </span>/path/to/parent/folder
 </code></pre></div>
 <h2 id="_7">其他问题<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
 <h3 id="q_11">Q: 如何查看版本信息？<a class="headerlink" href="#q_11" title="Permanent link">&para;</a></h3>
 <p>A: 使用 <code>-v</code> 或 <code>--version</code> 参数：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>ccb<span class="w"> </span>--version
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>ccb<span class="w"> </span>--version
 </code></pre></div>
 <h3 id="q_12">Q: 如何获取帮助？<a class="headerlink" href="#q_12" title="Permanent link">&para;</a></h3>
 <p>A: 使用 <code>-h</code> 或 <code>--help</code> 参数：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>ccb<span class="w"> </span>-h
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>ccb<span class="w"> </span>-h
 </code></pre></div>
 <h3 id="q_13">Q: 项目在哪里可以找到？<a class="headerlink" href="#q_13" title="Permanent link">&para;</a></h3>
 <p>A: 项目托管在 GitHub 上。请查看项目主页获取最新信息。</p>
