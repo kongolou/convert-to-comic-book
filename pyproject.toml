@@ -4,9 +4,10 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ccb"
-version = "2.0.0"
+version = "2.0.8"
 dependencies = []
 requires-python = ">=3.10"
+package-dir = {"" = "src"}
 authors = [
   {name = "kongolou", email = "kongolou@163.com"}
 ]
@@ -54,7 +55,7 @@ Changelog = "https://github.com/kongolou/convert-to-comic-book/blob/main/CHANGEL
 ccb = "ccb.cli:main"
 
 [tool.hatch.build]
-packages = ["src/ccb"]
+sources = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -89,3 +90,14 @@ docs = [
     "mkdocs-material>=9.0.0",
     "mkdocstrings[python]>=0.24.0",
 ]
+
+[[tool.uv.index]]
+name = "pypi"
+url = "https://pypi.org/simple/"
+publish-url = "https://upload.pypi.org/legacy/"
+
+[[tool.uv.index]]
+name = "testpypi"
+url = "https://test.pypi.org/simple/"
+publish-url = "https://test.pypi.org/legacy/"
+explicit = true

@@ -1,4 +1,4 @@
-# Convert to Comic Book (CCB) 漫画转转转
+# Convert to Comic Book 漫画转转转
 
 [![Python Version](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
@@ -34,20 +34,20 @@ pip install ccb[full]
 ### 基本使用
 
 ```bash
-# 转换单个文件夹为 CBZ（-R 转换后删除 leaf_folder）
-ccb /path/to/leaf_folder
-ccb /path/to/leaf_folder -R
+# 转换单个文件夹为 CBZ（-R 转换后删除源目录）
+ccb /path/to/single_folder
+ccb /path/to/single_folder -R
 
-# 批量转换整个目录下的文件夹为 CBZ（-R 转换后删除 leaf_folder）
+# 批量转换整个目录下的文件夹为 CBZ（-R 转换后删除叶目录）
 ccb -c /path/to/root_folder
 ccb -c /path/to/root_folder -R
 
 # 指定多个 CBZ 转换为文件夹
-ccb -f cbz -t folder /path/to/comic_book1.zip /path/to/comic_book2.zip
+ccb -f cbz -t folder comic_book1.zip comic_book2.zip
 
 # 指定导出路径（-F 强制替换同名文件或目录）
-ccb /path/to/source_folder -o /path/to/output_folder
-ccb /path/to/source_folder -o /path/to/output_folder -F
+ccb /path/to/source -o /dir/to/output
+ccb /path/to/source -o /dir/to/output -F
 ```
 
 ## 支持的格式
@@ -88,10 +88,10 @@ ccb [可选参数] <源列表>
   -f, --from-type {auto,folder,cbz,cbr,cb7,cbt,zip,rar,7z,tar}       
                         指定源类型，默认为`auto`
   -t, --to-type {folder,cbz,cbr,cb7,cbt}         
-                        指定目标类型，默认为`cbz`
+                        指定目标类型，默认为`cbz`（与`from-type`类型一致的源将不参与任何执行）
   -o, --output-dir OUTPUT_DIR
-                        重定向导出目录（默认行为是导出到源所在目录）.
-  -c, --collect         搜集源列表中所有的叶文件或不含叶文件的叶目录，并作为新的源列表.
+                        重定向导出目录（默认行为是导出到源所在目录）
+  -c, --collect         搜集源列表中所有的叶文件或不含叶文件的叶目录，并作为新的源列表
   -q, --quiet           静默模式，仅显示错误和摘要信息
   -R, --remove          处理完成后删除源列表中所有非`to-type`类型的源！
   -F, --force           强制替换同名的文件或目录！（默认行为是覆盖）

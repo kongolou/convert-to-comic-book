@@ -32,7 +32,6 @@ jobs:
         name: docs-site
         path: site/
 
-  # 推送到 GitHub Pages，仅在 main 分支的 push 事件触发时执行
   deploy-docs:
     needs: build-docs
     runs-on: ubuntu-latest

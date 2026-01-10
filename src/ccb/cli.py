@@ -32,15 +32,17 @@ def parse_args() -> argparse.Namespace:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  ccb /path/to/leaf_folder
-  ccb /path/to/leaf_folder -R # Remove leaf folder when done
+  ccb /path/to/source
+  # Remove the whole source when done
+  ccb /path/to/source -R
 
   ccb -c /path/to/root_folder
-  ccb -c /path/to/root_folder -R # Remove leaf sources under root folder when done
+  # Remove leaf sources under the root folder when done
+  ccb -c /path/to/root_folder -R
 
   ccb -f cbz -t folder comic1.cbz comic2.zip
 
-  ccb /path/to/source -o /path/to/output -F
+  ccb /path/to/source -o /dir/to/output -F
         """,
     )
 
@@ -371,7 +373,3 @@ def main() -> None:
     except Exception as e:
         logger.error(f"Unexpected error: {e}")
         exit(1)
-
-
-if __name__ == "__main__":
-    main()

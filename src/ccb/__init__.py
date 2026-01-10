@@ -17,7 +17,7 @@ from importlib.metadata import version, PackageNotFoundError
 try:
     __version__ = version("ccb")
 except PackageNotFoundError:
-    __version__ = "0.1.0-dev"
+    __version__ = "0.1.0.dev1"
 
 __all__ = [
     "ComicBookConverter",

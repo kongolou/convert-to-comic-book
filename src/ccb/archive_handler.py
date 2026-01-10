@@ -12,7 +12,7 @@ import logging
 import tempfile
 import subprocess
 
-from ccb.exceptions import ArchiveError
+from .exceptions import ArchiveError
 
 logger = logging.getLogger(__name__)
 
