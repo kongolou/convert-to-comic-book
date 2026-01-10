@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 def safe_remove(path: Path) -> None:
     """
     安全删除文件或文件夹
-    
+
     Args:
         path: 要删除的路径
     """
@@ -32,7 +32,7 @@ def safe_remove(path: Path) -> None:
 def ensure_output_dir(path: Path) -> None:
     """
     确保输出目录存在
-    
+
     Args:
         path: 输出目录路径
     """
@@ -49,20 +49,20 @@ def get_output_path(
 ) -> Path:
     """
     生成输出文件路径
-    
+
     Args:
         input_path: 输入文件路径
         output_type: 输出类型 (folder, cbz, cbr, cb7, cbt)
         output_dir: 输出目录，如果为None则使用输入文件的目录
-    
+
     Returns:
         输出文件路径
     """
     if output_dir is None:
         output_dir = input_path.parent
-    
+
     ensure_output_dir(output_dir)
-    
+
     if output_type == "folder":
         # 如果是文件夹，使用输入路径的名称
         if input_path.is_dir():
@@ -76,7 +76,7 @@ def get_output_path(
             stem = input_path.name
         else:
             stem = input_path.stem
-        
+
         extension_map = {
             "cbz": ".cbz",
             "cbr": ".cbr",
@@ -85,4 +85,3 @@ def get_output_path(
         }
         extension = extension_map.get(output_type, ".cbz")
         return output_dir / f"{stem}{extension}"
-

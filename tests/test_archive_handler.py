@@ -18,12 +18,12 @@ from ccb.exceptions import ArchiveError
 class TestArchiveHandler:
     def test_get_handler_mapping_and_unsupported(self):
         """测试 get_handler 的映射与不支持类型"""
-        assert isinstance(get_handler('zip'), ZipHandler)
-        assert isinstance(get_handler('cbz'), ZipHandler)
-        assert isinstance(get_handler('tar'), TarHandler)
-        assert isinstance(get_handler('cbt'), TarHandler)
+        assert isinstance(get_handler("zip"), ZipHandler)
+        assert isinstance(get_handler("cbz"), ZipHandler)
+        assert isinstance(get_handler("tar"), TarHandler)
+        assert isinstance(get_handler("cbt"), TarHandler)
         with pytest.raises(ArchiveError):
-            get_handler('unknown-type')
+            get_handler("unknown-type")
 
     def test_zip_compress_extract_and_is_valid(self, tmp_path):
         """测试 ZipHandler 的 compress/extract/is_valid 基本流程"""

@@ -32,7 +32,11 @@ full = [
     "rarfile>=4.0",
     "py7zr>=0.21.0",
 ]
-
+dev = [
+    "coverage>=7.13.1",
+    "pytest>=9.0.2",
+    "pytest-cov>=7.0.0",
+]
 docs = [
     "mkdocs>=1.5.0",
     "mkdocs-material>=9.0.0",
@@ -76,7 +80,9 @@ exclude_lines = [
 
 [dependency-groups]
 dev = [
+    "coverage>=7.13.1",
     "pytest>=9.0.2",
+    "pytest-cov>=7.0.0",
 ]
 docs = [
     "mkdocs>=1.5.0",
