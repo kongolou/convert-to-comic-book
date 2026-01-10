@@ -25,9 +25,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        # Install package with optional 'full' extras (rarfile, py7zr)
-        # pip install -e .[full]
-        pip install -e .[standard, dev]
+        pip install -e ".[full, dev]"
 
     - name: Run tests with coverage
       run: |
