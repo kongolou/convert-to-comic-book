@@ -35,7 +35,7 @@ jobs:
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: test-artifacts
+        name: test-artifacts-${{ matrix.os }}-py${{ matrix.python-version }}
         path: |
           report.xml
           coverage.xml
