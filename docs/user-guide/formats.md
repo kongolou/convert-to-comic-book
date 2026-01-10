@@ -59,27 +59,12 @@
 | `7z` | `folder`, `cbz`, `cbr`, `cb7`, `cbt` |
 | `tar` | `folder`, `cbz`, `cbr`, `cb7`, `cbt` |
 
-## 收集模式自动映射
-
-在收集模式（`-c`）下，标准压缩格式会自动映射到对应的漫画书格式：
-
-| 标准格式 | 映射为 |
-|---------|-------|
-| `zip` | `cbz` |
-| `rar` | `cbr` |
-| `7z` | `cb7` |
-| `tar` | `cbt` |
-
-如果同时指定了 `-t` 参数，则使用指定的输出格式。
-
 ## 格式要求
 
 ### 图片文件夹
 
 一个好的图片文件夹应该：
 - 仅包含图片文件
-- 可以包含子文件夹（会递归处理）
-- 可以包含可识别的压缩包（在收集模式下）
 
 ### 压缩包
 
@@ -96,6 +81,8 @@
 |-----|--------|---------|
 | RAR/CBR | `rarfile >= 4.0` | `pip install rarfile` 或 `uv tool install ccb[full]` |
 | 7Z/CB7 | `py7zr >= 0.21.0` | `pip install py7zr` 或 `uv tool install ccb[full]` |
+
+其中，用户需要手动安装 `WinRAR` 专有软件提供外部命令支持 `RAR/CBR` 格式转换。
 
 其他格式（ZIP/CBZ, TAR/CBT）使用 Python 标准库，无需额外依赖。
 

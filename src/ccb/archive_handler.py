@@ -10,6 +10,7 @@ from abc import ABC, abstractmethod
 from typing import Optional
 import logging
 import tempfile
+import subprocess
 
 from ccb.exceptions import ArchiveError
 
@@ -149,16 +150,81 @@ class RarHandler(ArchiveHandler):
             self._has_rarfile = True
         except ImportError:
             logger.warning("rarfile not installed, RAR/CBR support unavailable")
+        # Detect external unrar/rar/winrar command (prefer in that order)
+        self._external_tool = shutil.which("unrar") or shutil.which("rar") or shutil.which("winrar")
+        self._external_tool_kind = None
+        if self._external_tool:
+            # determine kind to adjust flags if necessary
+            try:
+                tool_name = Path(self._external_tool).stem.lower()
+            except Exception:
+                tool_name = self._external_tool.lower()
+            if "unrar" in tool_name:
+                self._external_tool_kind = "unrar"
+            elif "winrar" in tool_name:
+                self._external_tool_kind = "winrar"
+            elif tool_name.endswith("rar"):
+                self._external_tool_kind = "rar"
+            else:
+                self._external_tool_kind = "unknown"
+            logger.debug(f"Found external RAR extractor: {self._external_tool} (kind={self._external_tool_kind})")
     
     def extract(self, archive_path: Path, output_path: Path) -> None:
         """解压 RAR/CBR 文件"""
+        # Prefer external extractor (WinRAR/unrar/rar) if available
+        if self._external_tool:
+            output_path.mkdir(parents=True, exist_ok=True)
+            kind = self._external_tool_kind
+            # build candidate commands to try (primary, alternatives, minimal)
+            cmds = []
+            if kind == "unrar":
+                cmds.append([self._external_tool, 'x', '-o+', str(archive_path), str(output_path)])
+                cmds.append([self._external_tool, 'x', '-y', str(archive_path), str(output_path)])
+                cmds.append([self._external_tool, 'x', str(archive_path), str(output_path)])
+            elif kind in ("winrar", "rar"):
+                cmds.append([self._external_tool, 'x', '-y', str(archive_path), str(output_path)])
+                # WinRAR accepts '/y' on some installs
+                cmds.append([self._external_tool, 'x', '/y', str(archive_path), str(output_path)])
+                cmds.append([self._external_tool, 'x', str(archive_path), str(output_path)])
+            else:
+                cmds.append([self._external_tool, 'x', str(archive_path), str(output_path)])
+
+            # helper to run a single command and return (returncode, stdout, stderr, timeout_flag)
+            def _run(cmd, timeout_sec=120):
+                try:
+                    completed = subprocess.run(cmd, check=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=timeout_sec)
+                    out_s = completed.stdout.decode(errors='ignore') if completed.stdout else ''
+                    err_s = completed.stderr.decode(errors='ignore') if completed.stderr else ''
+                    return completed.returncode, out_s, err_s, False
+                except subprocess.TimeoutExpired as e:
+                    return -1, '', f'Timeout after {e.timeout}s', True
+                except FileNotFoundError as e:
+                    return -2, '', str(e), False
+
+            last_err = None
+            for cmd in cmds:
+                rc, out, err, timed_out = _run(cmd)
+                if rc == 0:
+                    logger.debug(f"Extracted {archive_path} to {output_path} using external tool {cmd}")
+                    return
+                # if timed out, raise immediately (avoid long waits)
+                if timed_out:
+                    raise ArchiveError(f"External extractor timeout for {archive_path}")
+                # record last non-empty error
+                last_err = err or out or last_err
+
+            # all external attempts failed
+            msg = (last_err or f"external tool exited with non-zero code using {self._external_tool}").strip()
+            logger.debug(f"External extractor attempts failed: {msg}")
+
+        # Fallback to rarfile library if present
         if not self._has_rarfile:
-            raise ArchiveError("rarfile library is required for RAR/CBR support")
+            raise ArchiveError("rarfile library is required for RAR/CBR support or install WinRAR/unrar")
         try:
             output_path.mkdir(parents=True, exist_ok=True)
-            with self.rarfile.RarFile(archive_path) as rar:
-                rar.extractall(output_path)
-            logger.debug(f"Extracted {archive_path} to {output_path}")
+            with self.rarfile.RarFile(str(archive_path)) as rar:
+                rar.extractall(str(output_path))
+            logger.debug(f"Extracted {archive_path} to {output_path} using rarfile")
         except Exception as e:
             raise ArchiveError(f"Failed to extract RAR archive {archive_path}: {e}")
     
@@ -170,6 +236,32 @@ class RarHandler(ArchiveHandler):
     
     def is_valid(self, archive_path: Path) -> bool:
         """验证 RAR/CBR 文件是否有效"""
+        # If external tool available, use it to test the archive
+        if self._external_tool:
+            try:
+                # try a few variants for the test command
+                test_cmds = [[self._external_tool, 't', str(archive_path)]]
+                if self._external_tool_kind in ("winrar", "rar"):
+                    test_cmds.append([self._external_tool, 't', '/p', str(archive_path)])
+                for cmd in test_cmds:
+                    try:
+                        completed = subprocess.run(cmd, check=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=30)
+                        if completed.returncode == 0:
+                            return True
+                    except subprocess.TimeoutExpired:
+                        logger.warning(f"External extractor timeout while testing archive: {archive_path}")
+                        return False
+                logger.debug("External tool test commands all returned non-zero")
+                return False
+            except subprocess.TimeoutExpired:
+                logger.warning(f"External extractor timeout while testing archive: {archive_path}")
+                return False
+            except FileNotFoundError:
+                return False
+            except Exception as e:
+                logger.debug(f"External extractor test error for {archive_path}: {e}")
+                return False
+
         if not self._has_rarfile:
             return False
         try:

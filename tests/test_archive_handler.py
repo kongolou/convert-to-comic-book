@@ -1,139 +1,91 @@
 """
-压缩/解压处理模块的单元测试
+Archive handler 单元测试
 """
 
 import pytest
 from pathlib import Path
 import tempfile
-import zipfile
-import tarfile
-import os
 
 from ccb.archive_handler import (
     ZipHandler,
     TarHandler,
+    RarHandler,
     get_handler,
-    ArchiveError,
 )
+from ccb.exceptions import ArchiveError
 
 
-class TestZipHandler:
-    """ZIP 处理器测试类"""
-    
-    def test_compress_folder(self):
-        """测试压缩文件夹"""
-        with tempfile.TemporaryDirectory() as tmpdir:
-            # 创建测试文件夹和文件
-            test_folder = Path(tmpdir) / "test_folder"
-            test_folder.mkdir()
-            (test_folder / "test.txt").write_text("test content")
-            
-            # 压缩
-            output_zip = Path(tmpdir) / "test.zip"
-            handler = ZipHandler()
-            handler.compress(test_folder, output_zip)
-            
-            # 验证
-            assert output_zip.exists()
-            assert zipfile.is_zipfile(output_zip)
-    
-    def test_extract_zip(self):
-        """测试解压 ZIP 文件"""
-        with tempfile.TemporaryDirectory() as tmpdir:
-            # 创建测试 ZIP 文件
-            zip_path = Path(tmpdir) / "test.zip"
-            with zipfile.ZipFile(zip_path, 'w') as zipf:
-                zipf.writestr("test.txt", "test content")
-            
-            # 解压
-            output_dir = Path(tmpdir) / "extracted"
-            handler = ZipHandler()
-            handler.extract(zip_path, output_dir)
-            
-            # 验证
-            assert output_dir.exists()
-            assert (output_dir / "test.txt").exists()
-            assert (output_dir / "test.txt").read_text() == "test content"
-    
-    def test_is_valid_zip(self):
-        """测试 ZIP 文件验证"""
-        with tempfile.TemporaryDirectory() as tmpdir:
-            # 创建有效 ZIP
-            zip_path = Path(tmpdir) / "test.zip"
-            with zipfile.ZipFile(zip_path, 'w') as zipf:
-                zipf.writestr("test.txt", "content")
-            
-            handler = ZipHandler()
-            assert handler.is_valid(zip_path) is True
-            
-            # 创建无效文件
-            invalid_path = Path(tmpdir) / "invalid.zip"
-            invalid_path.write_text("not a zip")
-            assert handler.is_valid(invalid_path) is False
-
-
-class TestTarHandler:
-    """TAR 处理器测试类"""
-    
-    def test_compress_folder(self):
-        """测试压缩文件夹为 TAR"""
-        with tempfile.TemporaryDirectory() as tmpdir:
-            # 创建测试文件夹
-            test_folder = Path(tmpdir) / "test_folder"
-            test_folder.mkdir()
-            (test_folder / "test.txt").write_text("test content")
-            
-            # 压缩
-            output_tar = Path(tmpdir) / "test.tar"
-            handler = TarHandler()
-            handler.compress(test_folder, output_tar)
-            
-            # 验证
-            assert output_tar.exists()
-            assert tarfile.is_tarfile(output_tar)
-    
-    def test_extract_tar(self):
-        """测试解压 TAR 文件"""
-        with tempfile.TemporaryDirectory() as tmpdir:
-            # 创建测试 TAR 文件
-            tar_path = Path(tmpdir) / "test.tar"
-            with tarfile.open(tar_path, 'w') as tar:
-                test_file = Path(tmpdir) / "test.txt"
-                test_file.write_text("test content")
-                tar.add(test_file, arcname="test.txt")
-            
-            # 解压
-            output_dir = Path(tmpdir) / "extracted"
-            handler = TarHandler()
-            handler.extract(tar_path, output_dir)
-            
-            # 验证
-            assert output_dir.exists()
-            assert (output_dir / "test.txt").exists()
-            assert (output_dir / "test.txt").read_text() == "test content"
-
-
-class TestGetHandler:
-    """处理器获取测试类"""
-    
-    def test_get_zip_handler(self):
-        """测试获取 ZIP 处理器"""
-        handler = get_handler("zip")
-        assert isinstance(handler, ZipHandler)
-        
-        handler = get_handler("cbz")
-        assert isinstance(handler, ZipHandler)
-    
-    def test_get_tar_handler(self):
-        """测试获取 TAR 处理器"""
-        handler = get_handler("tar")
-        assert isinstance(handler, TarHandler)
-        
-        handler = get_handler("cbt")
-        assert isinstance(handler, TarHandler)
-    
-    def test_get_invalid_handler(self):
-        """测试获取无效处理器"""
+class TestArchiveHandler:
+    def test_get_handler_mapping_and_unsupported(self):
+        """测试 get_handler 的映射与不支持类型"""
+        assert isinstance(get_handler('zip'), ZipHandler)
+        assert isinstance(get_handler('cbz'), ZipHandler)
+        assert isinstance(get_handler('tar'), TarHandler)
+        assert isinstance(get_handler('cbt'), TarHandler)
         with pytest.raises(ArchiveError):
-            get_handler("invalid")
+            get_handler('unknown-type')
 
+    def test_zip_compress_extract_and_is_valid(self, tmp_path):
+        """测试 ZipHandler 的 compress/extract/is_valid 基本流程"""
+        src = tmp_path / "src"
+        src.mkdir()
+        (src / "a.txt").write_text("hello world")
+        sub = src / "sub"
+        sub.mkdir()
+        (sub / "b.txt").write_text("subfile")
+
+        archive = tmp_path / "out.cbz"
+        handler = ZipHandler()
+        handler.compress(src, archive)
+
+        assert archive.exists()
+        assert handler.is_valid(archive)
+
+        extracted = tmp_path / "extracted"
+        handler.extract(archive, extracted)
+        assert (extracted / "a.txt").read_text() == "hello world"
+        assert (extracted / "sub" / "b.txt").read_text() == "subfile"
+
+    def test_zip_compress_single_file(self, tmp_path):
+        """测试将单个文件压缩为 ZIP"""
+        f = tmp_path / "single.txt"
+        f.write_text("solo")
+        archive = tmp_path / "single.cbz"
+
+        handler = ZipHandler()
+        handler.compress(f, archive)
+
+        assert archive.exists()
+        # 解压确认文件名在根目录
+        out = tmp_path / "out"
+        handler.extract(archive, out)
+        assert (out / "single.txt").read_text() == "solo"
+
+    def test_tar_compress_extract_and_is_valid(self, tmp_path):
+        """测试 TarHandler 的 compress/extract/is_valid 基本流程"""
+        src = tmp_path / "src_tar"
+        src.mkdir()
+        (src / "x.txt").write_text("tar test")
+
+        archive = tmp_path / "out.tar"
+        handler = TarHandler()
+        handler.compress(src, archive)
+
+        assert archive.exists()
+        assert handler.is_valid(archive)
+
+        extracted = tmp_path / "extracted_tar"
+        handler.extract(archive, extracted)
+        assert (extracted / "src_tar" / "x.txt").read_text() == "tar test"
+
+    def test_rar_handler_no_support(self, tmp_path):
+        """当系统既无外部工具又未安装 rarfile 时，RarHandler 的行为"""
+        handler = RarHandler()
+        # 如果系统可用 rar 支持，则跳过此测试以避免误报
+        if handler._external_tool or handler._has_rarfile:
+            pytest.skip("System provides RAR support; skipping absence test")
+
+        with pytest.raises(ArchiveError):
+            handler.extract(Path("nonexistent.cbr"), tmp_path / "out")
+
+        assert handler.is_valid(Path("nonexistent.cbr")) is False

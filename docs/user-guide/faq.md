@@ -50,27 +50,17 @@ ccb "C:\path with spaces\folder"
 ccb "/path with spaces/folder"
 ```
 
-### Q: 如何递归处理子文件夹？
+### Q: 如何处理子文件夹？
 
-A: 使用 `-r` 参数：
+A: 使用 `-c` 参数处理子文件夹：
 
 ```bash
-ccb -r /path/to/folders
+ccb -c /path/to/folders
 ```
 
 ### Q: 收集模式如何工作？
 
-A: 使用 `-c` 参数，程序会自动查找并转换可识别的压缩包：
-
-```bash
-ccb -c /path/to/folder
-```
-
-可以与 `-r` 组合使用以递归搜索：
-
-```bash
-ccb -c -r /path/to/folders
-```
+A: `-c` 参数的作用是搜集源列表中所有非`to-type`类型的叶子文件（或不含叶子文件的叶子目录）
 
 ### Q: 如何查看详细日志？
 
@@ -92,6 +82,10 @@ A: 使用 `--remove` 参数（请谨慎使用）：
 ccb --remove /path/to/folder
 ```
 
+注意这将删除源列表中的所有源。
+
+如果不想删除整个文件夹，只需要定点清除，请阅读并使用 `-c` 参数。
+
 ## 格式相关
 
 ### Q: 支持哪些输入格式？
@@ -109,6 +103,8 @@ A: RAR 格式需要 `rarfile` 库。请安装完整版本：
 ```bash
 uv tool install ccb[full]
 ```
+
+**注意：用户需要手动安装 `WinRAR` 专有软件提供外部命令支持。**
 
 ### Q: 为什么无法处理 7Z 文件？
 
@@ -156,10 +152,10 @@ A: 可以同时指定多个路径：
 ccb /path/to/folder1 /path/to/folder2 /path/to/folder3
 ```
 
-或使用递归模式：
+或使用 `-c` 参数：
 
 ```bash
-ccb -r /path/to/parent/folder
+ccb -c /path/to/parent/folder
 ```
 
 ## 其他问题

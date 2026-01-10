@@ -3,14 +3,14 @@
 ## 基本语法
 
 ```
-ccb [可选参数] <路径...>
+ccb [可选参数] <源列表>
 ```
 
 ## 位置参数
 
-### `paths`
+### `源列表`
 
-一个或多个文件夹或压缩包路径。
+叶子文件或目录。
 
 **支持的格式**:
 - 文件夹 (folder)
@@ -31,11 +31,11 @@ ccb /path/to/comic.cbz /path/to/another.cbr
 
 ### `-f, --from-type`
 
-指定输入类型。
+指定源类型。
 
-**可选值**: `folder`, `cbz`, `cbr`, `cb7`, `cbt`, `zip`, `rar`, `7z`, `tar`
+**可选值**: `auto`, `folder`, `cbz`, `cbr`, `cb7`, `cbt`, `zip`, `rar`, `7z`, `tar`
 
-**默认值**: 自动检测
+**默认值**: `auto`（自动识别除了`to-type`外所有可能的类型）
 
 **示例**:
 ```bash
@@ -44,7 +44,7 @@ ccb -f cb7 /path/to/comic.cb7
 
 ### `-t, --to-type`
 
-指定输出类型。
+指定目标类型，将`from-type`所指定的类型转换为`to-type`。
 
 **可选值**: `folder`, `cbz`, `cbr`, `cb7`, `cbt`
 
@@ -55,53 +55,28 @@ ccb -f cb7 /path/to/comic.cb7
 ccb -t cbr /path/to/folder
 ```
 
-### `-o, --output`
+### `-o, --output-dir`
 
-指定输出目录。
+重定向导出目录。
 
-**默认值**: 输入文件的目录
+**默认值**: 将文件导出到源文件所在目录
 
 **示例**:
 ```bash
 ccb /path/to/folder -o /path/to/output
 ```
 
-### `-r, --recursive`
-
-递归处理子文件夹。
-
-**行为**:
-- **普通模式**: 递归处理所有子文件夹
-- **收集模式**: 递归搜索所有子文件夹中的压缩包
-
-**示例**:
-```bash
-# 递归处理所有子文件夹
-ccb -r /path/to/folders
-
-# 递归收集压缩包
-ccb -c -r /path/to/archives
-```
-
 ### `-c, --collect`
 
-收集模式：查找并转换可识别的压缩包。
-
-在收集模式下，程序会自动查找并转换以下格式：
-- `zip` → `cbz`
-- `rar` → `cbr`
-- `7z` → `cb7`
-- `tar` → `cbt`
-
-可以与 `-r` 组合使用以递归搜索。
+搜集源列表中所有非`to-type`类型的叶子文件（或不含叶子文件的叶子目录），并作为新的源列表。
 
 **示例**:
 ```bash
 # 收集当前目录下的压缩包
 ccb -c /path/to/folder
 
-# 递归收集所有子文件夹中的压缩包
-ccb -c -r /path/to/folders
+# 收集并转换为指定格式
+ccb -c -t cbz /path/to/folders
 ```
 
 ### `-q, --quiet`
@@ -113,15 +88,24 @@ ccb -c -r /path/to/folders
 ccb -q /path/to/folder
 ```
 
-### `--remove`
+### `-R, --remove`
 
-转换后删除源文件。
+处理完成后删除源列表中的所有源！
 
 **警告**: 此操作不可逆，请谨慎使用！
 
 **示例**:
 ```bash
-ccb --remove /path/to/folder
+ccb -R /path/to/folder
+```
+
+### `-F, --force`
+
+强制替换同名的叶子文件或目录（默认行为是覆盖）！
+
+**示例**:
+```bash
+ccb -F /path/to/folder
 ```
 
 ### `-v, --version`
@@ -133,33 +117,12 @@ ccb --remove /path/to/folder
 ccb --version
 ```
 
-## 组合使用
+## 带空格的路径（引号）
 
-多个选项可以组合使用：
-
-```bash
-# 递归收集压缩包，转换为 CBZ，并删除源文件
-ccb -c -r -t cbz --remove /path/to/archives
-
-# 批量转换，静默模式
-ccb -q -r /path/to/folders
-```
-
-## 路径处理
-
-### Windows 路径
-
-在 Windows PowerShell 中，包含空格的路径需要用引号包裹：
+在 Windows PowerShell 或其他 shell 中，路径中包含空格时通常需要用引号包裹，例如:
 
 ```powershell
-ccb "C:\Users\Username\My Comics\comic folder"
+ccb "C:\Program Files\My Comic"
 ```
 
-### 多个路径
-
-可以同时指定多个路径：
-
-```bash
-ccb /path/to/folder1 /path/to/folder2 /path/to/folder3
-```
-
+`ccb` 会自动处理带引号的路径——在内部会移除路径字符串的引号并正确识别目录或文件。因此你可以放心地在命令行中使用带引号的路径，CLI 的收集与处理逻辑会正确解析它们。

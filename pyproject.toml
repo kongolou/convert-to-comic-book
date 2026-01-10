@@ -1,10 +1,30 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [project]
 name = "ccb"
-version = "1.0.0"
+version = "1.0.4"
+dependencies = []
+requires-python = ">=3.10"
+authors = [
+  {name = "kongolou", email = "kongolou@163.com"}
+]
+maintainers = [
+  {name = "kongolou", email = "kongolou@163.com"}
+]
 description = "Convert to Comic Book - 将图片文件夹或压缩包转换为漫画书格式"
 readme = "README.md"
-requires-python = ">=3.10"
-dependencies = []
+license = "MIT"
+license-files = ["LICEN[CS]E.*"]
+keywords = ["Comic", "漫画"]
+classifiers = [
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
 
 [project.optional-dependencies]
 standard = []
@@ -13,12 +33,18 @@ full = [
     "py7zr>=0.21.0",
 ]
 
+[project.urls]
+Homepage = "https://github.com/kongolou"
+Documentation = "https://convert-to-comic-book.readthedocs.io"
+Repository = "https://github.com/kongolou/convert-to-comic-book.git"
+Issues = "https://github.com/kongolou/convert-to-comic-book/issues"
+Changelog = "https://github.com/kongolou/convert-to-comic-book/blob/main/CHANGELOG.md"
+
 [project.scripts]
 ccb = "ccb.cli:main"
 
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+[tool.hatch.build]
+packages = ["src/ccb"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -26,9 +52,10 @@ python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
 addopts = "-v --tb=short"
+pythonpath = [".", "src"]
 
 [tool.coverage.run]
-source = ["ccb"]
+source = ["src/ccb"]
 omit = ["tests/*", "*/test_*.py"]
 
 [tool.coverage.report]

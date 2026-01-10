@@ -1,82 +1,106 @@
 # 使用示例
 
-## 示例 1: 转换单个文件夹
+假设一位 Linux 用户的 Home 目录下具有如下结构：
+```
+~
+├──awesome one.cbr
+└──comic_books/
+   ├──comic_book1.zip
+   ├──comic_book2/
+   └──comic_book3/
+      ├──chapter1.7z
+      ├──chapter2.cbt
+      └──chapter3/
+```
+## 示例 1: 将 comic_book1.zip 文件夹转换为 comic_book1.cbz
 
 ```bash
-ccb /path/to/comic/folder
+ccb ~/comic_books/comic_book1.zip
 ```
 
-**输出**: `/path/to/comic/folder.cbz`
+输出文件: 
+- `~/comic_books/comic_book1.cbz`
 
-## 示例 2: 批量转换并指定格式
+## 示例 2: 将 comic_book2 文件夹转换为 comic_book2.cbz
 
 ```bash
-ccb -t cbr -r /path/to/folders
+ccb ~/comic_books/comic_book2
 ```
 
-递归转换所有子文件夹为 CBR 格式。
+输出文件: 
+- `~/comic_books/comic_book2.cbz`
 
-## 示例 3: 收集并转换压缩包
+## 示例 3: 批量转换 chapter1.7z、chapter2.cbt chapter3 文件夹到 cbt 格式
 
 ```bash
-ccb -c /path/to/archives
+ccb -t cbt \
+    ~/comic_books/comic_book3/chapter1.7z \
+    ~/comic_books/comic_book3/chapter2.cbt \
+    ~/comic_books/comic_book3/chapter3
 ```
 
-查找当前目录下的 `zip`, `rar`, `7z`, `tar` 文件并转换为对应的漫画书格式。
+输出文件: 
+- `~/comic_books/comic_book3/chapter1.cbt`
+- `~/comic_books/comic_book3/chapter3.cbt`
 
-## 示例 4: 递归收集并统一格式
+注意到 chapter2.cbt 不发生转换
+
+## 示例 4: 批量转换 chapter1.7z、chapter2.cbt chapter3 文件夹到 comic_books 下后删除
 
 ```bash
-ccb -c -r /path/to/archives -t cbz
+ccb ~/comic_books/comic_book3/chapter1.7z \
+    ~/comic_books/comic_book3/chapter2.cbt \
+    ~/comic_books/comic_book3/chapter3 \
+    -o ~/comic_books \
+    -R
+```
+执行后目录：
+```
+~
+├──awesome one.cbr
+└──comic_books/
+   ├─*chapter1.cbz
+   ├─*chapter2.cbz
+   ├─*chapter3.cbz
+   ├──comic_book1.zip
+   ├──comic_book2/
+   └──comic_book3/
+      └──.
 ```
 
-递归搜索所有子文件夹中的压缩包，统一转换为 CBZ 格式。
-
-## 示例 5: 转换并删除源文件
+## 示例 5：批量转换 comic_books 下的源后删除，静默输出
 
 ```bash
-ccb -f cb7 -t cbt /path/to/comic.cb7 --remove
+ccb -c ~/comic_books -q -R
+```
+执行后目录：
+```
+~
+├──awesome one.cbr
+└──comic_books/
+   ├─*comic_book1.cbz
+   ├─*comic_book2.cbz
+   └──comic_book3/
+      ├─*chapter1.cbz
+      ├─*chapter2.cbz
+      └─*chapter3.cbz
+```
+可以看到，使用 `-c` 参数后，命令变简洁了，实际上，上述命令等价于
+```
+ccb ~/comic_books/comic_book1.zip \
+    ~/comic_books/comic_book2 \
+    ~/comic_books/comic_book3/chapter1.7z \
+    ~/comic_books/comic_book3/chapter2.cbt \
+    ~/comic_books/comic_book3/chapter3 \
+    -q -R
 ```
 
-转换 CB7 为 CBT，并删除源文件。
+## 示例 6: 处理包含空格的路径 
 
-## 示例 6: 指定输出目录
+使用引号包裹即可：
 
 ```bash
-ccb /path/to/folder -o /path/to/output
+ccb "~/awesome one.cbr"
 ```
-
-转换文件夹为 CBZ，输出到指定目录。
-
-## 示例 7: 处理包含空格的路径（Windows）
-
-在 Windows PowerShell 中，使用引号包裹路径：
-
-```powershell
-ccb "C:\Users\Username\My Comics\comic folder"
-```
-
-## 示例 8: 批量处理多个路径
-
-```bash
-ccb /path/to/folder1 /path/to/folder2 /path/to/folder3
-```
-
-同时处理多个路径。
-
-## 示例 9: 组合使用多个选项
-
-```bash
-ccb -c -r -t cbz --remove /path/to/archives
-```
-
-递归收集所有压缩包，转换为 CBZ 格式，并删除源文件。
-
-## 示例 10: 使用静默模式
-
-```bash
-ccb -q -r /path/to/folders
-```
-
-静默模式下仅显示错误和摘要信息。
-
+输出文件: 
+- ~/awesome one.cbz

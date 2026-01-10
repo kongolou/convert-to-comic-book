@@ -70,5 +70,5 @@ plugins:
   - mkdocstrings:
       handlers:
         python:
-          paths: [ccb]
+          paths: [src/ccb]
 

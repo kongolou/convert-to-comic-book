@@ -4,9 +4,9 @@ Convert to Comic Book - 将图片文件夹或压缩包转换为漫画书格式
 
 __author__ = "kongolou"
 
-from ccb.converter import ComicBookConverter
-from ccb.file_detector import detect_file_type
-from ccb.exceptions import (
+from .converter import ComicBookConverter
+from .file_detector import detect_file_type
+from .exceptions import (
     ComicBookError,
     UnsupportedFormatError,
     ArchiveError,

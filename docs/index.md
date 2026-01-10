@@ -16,16 +16,13 @@ CCB 是一个强大的命令行工具，用于将图片文件夹或压缩包转�
 
 ```bash
 # 安装
-uv tool install ccb
+pip install ccb
 
 # 转换文件夹为 CBZ
 ccb /path/to/your/folder
 
 # 批量转换
-ccb -r -t cbr /path/to/your/folders
-
-# 收集并转换压缩包
-ccb -c -r /path/to/your/folders
+ccb -c /path/to/your/folders
 ```
 
 ## 文档导航

@@ -9,12 +9,14 @@ from pathlib import Path
 from typing import List, Optional
 import time
 
-from ccb import __version__
-from ccb.converter import ComicBookConverter
-from ccb.file_detector import detect_file_type, get_comic_format, is_archive_file
-from ccb.exceptions import ComicBookError
+from . import __version__
+from .converter import ComicBookConverter
+from .file_detector import detect_file_type, get_comic_format, is_archive_file
+from .exceptions import ComicBookError
 
 logger = logging.getLogger(__name__)
+
+PROG_NAME = "Convert to Comic Book"
 
 
 def parse_args() -> argparse.Namespace:
@@ -25,126 +27,141 @@ def parse_args() -> argparse.Namespace:
         解析后的参数对象
     """
     parser = argparse.ArgumentParser(
-        prog="Convert to Comic Book",
-        description="Convert to Comic Book - 将图片文件夹或压缩包转换为漫画书格式",
+        prog="ccb",
+        description="Convert to Comic Book - Convert image folders or archives to comic book formats.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  # 转换单个图片文件夹为 cbz
-  ccb /path/to/your/folder
-  
-  # 批量转换文件夹为 cbr
-  ccb -t cbr -r /path/to/your/folders
-  
-  # 转换 cb7 为 cbt 并删除源文件
-  ccb -f cb7 -t cbt /path/to/comic_book.cb7 --remove
-  
-  # 收集并转换压缩包
-  ccb -c /path/to/your/folder
-  
-  # 递归收集并转换为 cbz
-  ccb -c -r /path/to/your/folders -t cbz
+  ccb /path/to/leaf_folder
+  ccb /path/to/leaf_folder -R # Remove leaf folder when done
+
+  ccb -c /path/to/root_folder
+  ccb -c /path/to/root_folder -R # Remove leaf sources under root folder when done
+
+  ccb -f cbz -t folder comic1.cbz comic2.zip
+
+  ccb /path/to/source -o /path/to/output -F
         """
     )
     
     parser.add_argument(
         "paths",
         nargs="*",
-        help="一个或多个文件夹或压缩包路径（支持 cbz, cbr, cb7, cbt, zip, rar, 7z, tar）"
+        help="Input files or directories (supports cbz, cbr, cb7, cbt, zip, rar, 7z, tar)"
     )
     
     parser.add_argument(
         "-f", "--from-type",
-        choices=["folder", "cbz", "cbr", "cb7", "cbt", "zip", "rar", "7z", "tar"],
-        default=None,
-        help="指定输入类型（默认自动检测）"
+        choices=["auto", "folder", "cbz", "cbr", "cb7", "cbt", "zip", "rar", "7z", "tar"],
+        default="auto",
+        help="Source type (default: auto)."
     )
     
     parser.add_argument(
         "-t", "--to-type",
         choices=["folder", "cbz", "cbr", "cb7", "cbt"],
         default="cbz",
-        help="指定输出类型（默认: cbz）"
+        help="Target type (default: cbz)."
     )
     
     parser.add_argument(
-        "-o", "--output",
+        "-o", "--output-dir",
         type=str,
         default=None,
-        help="指定输出目录（默认: 输入文件的目录）"
-    )
-    
-    parser.add_argument(
-        "-r", "--recursive",
-        action="store_true",
-        help="递归处理子文件夹（在收集模式下，递归搜索所有子文件夹中的压缩包）"
+        help="Output directory (default: source directory)."
     )
     
     parser.add_argument(
         "-c", "--collect",
         action="store_true",
-        help="收集模式：查找并转换可识别的压缩包（可与 -r 组合使用以递归搜索）"
+        help="Collect leaf sources under given paths, and use them as new input."
     )
     
     parser.add_argument(
         "-q", "--quiet",
         action="store_true",
-        help="静默模式：仅显示错误和摘要"
+        help="Quiet mode: show only errors."
     )
     
     parser.add_argument(
-        "--remove",
+        "-R", "--remove",
         action="store_true",
-        help="转换后删除源文件"
+        help="Remove sources after processing (excluding already matching targets)."
+    )
+    
+    parser.add_argument(
+        "-F", "--force",
+        action="store_true",
+        help="Force replace existing targets."
     )
     
     parser.add_argument(
         "-v", "--version",
         action="version",
-        version=f"%(prog)s v{__version__}",
-        # version=f"Convert to Comic Book v{__version__}"
+        version=f"{PROG_NAME} v{__version__}"
     )
     
     return parser.parse_args()
 
 
-def collect_archives(path: Path, recursive: bool = False) -> List[Path]:
+def collect_sources(path: Path, exclude_to_type: Optional[str] = None) -> List[Path]:
     """
-    收集路径下的所有压缩包文件
+    搜集路径下的所有叶子文件或不含叶子文件的叶子目录
     
     Args:
         path: 搜索路径
-        recursive: 是否递归搜索子文件夹
     
     Returns:
-        压缩包文件路径列表
+        叶子文件或目录列表
     """
-    archives = []
+    sources = []
     
     if not path.exists():
         logger.warning(f"Path does not exist: {path}")
-        return archives
+        return sources
     
     if path.is_file():
+        # 叶子文件，检查是否是支持的压缩格式
         if is_archive_file(path):
-            archives.append(path)
+            detected = detect_file_type(path)
+            # 如果提供了排除的 to-type，仅跳过那些已经是目标漫画书格式的文件（例如已为 cbz/cbr/cb7/cbt）
+            if exclude_to_type and detected is not None and detected == exclude_to_type:
+                return sources
+            sources.append(path)
     elif path.is_dir():
         try:
-            if recursive:
-                # 递归搜索，Path 对象已经正确处理包含空格的路径
-                for file_path in path.rglob("*"):
-                    if file_path.is_file() and is_archive_file(file_path):
-                        archives.append(file_path)
-            else:
-                # 只搜索当前目录
-                for file_path in path.iterdir():
-                    if file_path.is_file() and is_archive_file(file_path):
-                        archives.append(file_path)
+            has_subdirs = False
+            has_archive_files = False
+            
+            # 记录递归前的sources长度
+            before_recursive = len(sources)
+            
+            for item in path.iterdir():
+                if item.is_file():
+                    # 检查是否是支持的压缩格式
+                    if is_archive_file(item):
+                        detected_item = detect_file_type(item)
+                        # 如果提供了排除的 to-type，跳过已经是目标漫画书格式的文件
+                        if exclude_to_type and detected_item is not None and detected_item == exclude_to_type:
+                            continue
+                        has_archive_files = True
+                        sources.append(item)
+                elif item.is_dir():
+                    has_subdirs = True
+                    # 递归搜集子目录中的源
+                    sources.extend(collect_sources(item, exclude_to_type=exclude_to_type))
+            
+            # 计算递归后新增的源数量
+            added_sources = len(sources) - before_recursive
+            
+            # 如果目录不含子目录且不含压缩文件，或者含子目录但递归后没有新增源（说明子目录中也没有压缩文件）
+            if (not has_subdirs and not has_archive_files) or (has_subdirs and added_sources == 0):
+                sources.append(path)
         except (PermissionError, OSError) as e:
             logger.warning(f"Error accessing directory {path}: {e}")
-            return archives
+            return sources
     
-    return archives
+    return sources
 
 
 async def convert_single(
@@ -154,6 +171,7 @@ async def convert_single(
     to_type: str,
     output_dir: Optional[Path],
     remove_source: bool,
+    force: bool,
 ) -> Optional[Path]:
     """
     异步转换单个文件或文件夹
@@ -186,6 +204,7 @@ async def convert_single(
             to_type,
             output_dir,
             remove_source,
+            force,
         )
         return result
     except Exception as e:
@@ -212,13 +231,13 @@ def process_paths(args: argparse.Namespace) -> None:
     
     converter = ComicBookConverter()
     # 处理输出目录路径，移除可能的引号
-    output_dir = Path(args.output.strip('"\'')) if args.output else None
+    output_dir = Path(args.output_dir.strip('"\'')) if args.output_dir else None
     
     # 收集要处理的路径
     paths_to_process = []
     
     if args.collect:
-        # 收集模式：查找压缩包
+        # 收集模式：查找叶子文件或不含叶子文件的叶子目录
         for path_str in args.paths:
             # 处理路径字符串，移除可能的引号（Windows PowerShell 可能会保留引号）
             path_str = path_str.strip('"\'')
@@ -229,14 +248,18 @@ def process_paths(args: argparse.Namespace) -> None:
                 logger.warning(f"Path does not exist: {path}")
                 continue
             
-            archives = collect_archives(path, args.recursive)
-            if archives:
-                paths_to_process.extend(archives)
+            collected = collect_sources(path)
+            # 在收集模式下，排除已经是目标类型的文件（如 to-type=cbz 时跳过 cbz/zip 映射后的文件）
+            collected = collect_sources(path, exclude_to_type=args.to_type)
+            if collected:
+                # 当通过 -c 参数生成源列表时，统一使用带引号的路径字符串表示（便于在 shell/PowerShell 中复用）
+                quoted = [f'"{p}"' for p in collected]
+                paths_to_process.extend(quoted)
                 if not args.quiet:
-                    logger.info(f"Found {len(archives)} archive(s) in: {path}")
+                    logger.info(f"Collected {len(collected)} source(s) from: {path}")
             else:
                 if not args.quiet:
-                    logger.info(f"No archives found in: {path}")
+                    logger.info(f"No sources collected from: {path}")
     else:
         # 普通模式：处理指定的路径
         for path_str in args.paths:
@@ -250,22 +273,7 @@ def process_paths(args: argparse.Namespace) -> None:
                 continue
             
             if path.is_dir():
-                if args.recursive:
-                    # 递归处理子文件夹
-                    try:
-                        for subdir in path.rglob("*"):
-                            # Path 对象已经正确处理包含空格的路径，无需额外处理
-                            if subdir.is_dir():
-                                paths_to_process.append(subdir)
-                        # 也处理文件
-                        for file in path.rglob("*"):
-                            if file.is_file() and detect_file_type(file):
-                                paths_to_process.append(file)
-                    except (PermissionError, OSError) as e:
-                        logger.warning(f"Error accessing path {path}: {e}")
-                        continue
-                else:
-                    paths_to_process.append(path)
+                paths_to_process.append(path)
             elif path.is_file():
                 paths_to_process.append(path)
             else:
@@ -275,21 +283,20 @@ def process_paths(args: argparse.Namespace) -> None:
         logger.warning("No valid paths to process")
         return
     
-    # 处理收集模式下的格式映射
-    if args.collect:
-        # 在收集模式下，标准格式自动映射到对应的漫画书格式
-        # 但如果指定了输出类型，使用指定的类型
-        pass
-    
     # 异步处理所有路径
     start_time = time.time()
     
     async def process_all():
         tasks = []
         for input_path in paths_to_process:
+            # 支持 paths_to_process 中既有 Path 对象也有带引号的字符串（来自 -c 模式）
+            if isinstance(input_path, str):
+                path_str = input_path.strip('"\'')
+                input_path = Path(path_str)
+
             # 确定输入类型
             from_type = args.from_type
-            if from_type is None:
+            if from_type == "auto":
                 detected = detect_file_type(input_path)
                 from_type = detected
             
@@ -308,6 +315,7 @@ def process_paths(args: argparse.Namespace) -> None:
                 to_type,
                 output_dir,
                 args.remove,
+                args.force,
             )
             tasks.append(task)
         

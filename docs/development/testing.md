@@ -41,7 +41,7 @@ tests/
 ├── test_archive_handler.py    # 压缩/解压处理测试
 ├── test_converter.py          # 核心转换测试
 ├── test_utils.py              # 工具函数测试
-├── test_cli.py                # CLI 测试
+├── test_cli.py                # CLI 测试（包含带空格/带引号路径的用例）
 ├── test_cli_recursive.py      # CLI 递归处理测试
 └── test_cli_combinations.py   # CLI 参数组合测试
 ```
@@ -54,6 +54,23 @@ tests/
 - 转换逻辑：主要转换路径都有测试
 - 工具函数：所有函数都有测试
 - CLI 接口：基本功能和参数组合测试
+
+### 在 Windows 虚拟环境中运行测试
+
+如果你在 Windows 上使用项目自带或推荐的虚拟环境（例如 `.venv`），可以按如下方式运行测试：
+
+```powershell
+# 激活虚拟环境（如果尚未激活）
+& ./.venv/Scripts/Activate.ps1
+
+# 运行全部测试
+pytest -q
+
+# 仅运行 CLI 测试
+pytest -q tests/test_cli.py
+```
+
+测试中包含对 CLI 行为的验证，例如对带空格的路径（在 PowerShell/命令行中常用引号包裹）处理的用例，确保在不同 shell 下路径解析正确。
 
 ## 编写新测试
 

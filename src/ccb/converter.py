@@ -8,10 +8,10 @@ from typing import Optional
 import logging
 import tempfile
 
-from ccb.file_detector import detect_file_type, get_comic_format, is_valid_comic_format
-from ccb.archive_handler import get_handler
-from ccb.utils import get_output_path, safe_remove
-from ccb.exceptions import ConversionError, UnsupportedFormatError
+from .file_detector import detect_file_type, get_comic_format, is_valid_comic_format
+from .archive_handler import get_handler
+from .utils import get_output_path, safe_remove
+from .exceptions import ConversionError, UnsupportedFormatError
 
 logger = logging.getLogger(__name__)
 
@@ -29,6 +29,7 @@ class ComicBookConverter:
         output_type: str,
         output_dir: Optional[Path] = None,
         remove_source: bool = False,
+        force: bool = False,
     ) -> Path:
         """
         执行转换
@@ -38,6 +39,7 @@ class ComicBookConverter:
             output_type: 输出类型 (folder, cbz, cbr, cb7, cbt)
             output_dir: 输出目录，如果为None则使用输入文件的目录
             remove_source: 是否删除源文件
+            force: 是否强制替换同名的输出文件或目录
         
         Returns:
             输出文件路径
@@ -61,6 +63,15 @@ class ComicBookConverter:
         
         # 生成输出路径
         output_path = get_output_path(input_path, output_type, output_dir)
+        
+        # 检查输出路径是否存在
+        if output_path.exists():
+            if force:
+                logger.info(f"Force replacing existing output: {output_path}")
+                safe_remove(output_path)
+            else:
+                # 默认行为是覆盖，所以这里不需要做任何操作
+                logger.info(f"Output already exists, will overwrite: {output_path}")
         
         try:
             # 根据转换类型选择处理方法
