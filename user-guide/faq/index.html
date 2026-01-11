@@ -1617,17 +1617,17 @@
 <h2 id="_2">安装相关<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <h3 id="q-ccb">Q: 如何安装 CCB？<a class="headerlink" href="#q-ccb" title="Permanent link">&para;</a></h3>
 <p>A: 推荐使用 <code>uv</code> 进行安装：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>uv<span class="w"> </span>tool<span class="w"> </span>install<span class="w"> </span>ccb
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>uv<span class="w"> </span>tool<span class="w"> </span>install<span class="w"> </span>ccb-cli
 </code></pre></div>
 <p>或使用 <code>pip</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>pip<span class="w"> </span>install<span class="w"> </span>ccb
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>pip<span class="w"> </span>install<span class="w"> </span>ccb-cli
 </code></pre></div>
 <h3 id="q-rar-7z">Q: 如何安装完整版本（包含 RAR 和 7Z 支持）？<a class="headerlink" href="#q-rar-7z" title="Permanent link">&para;</a></h3>
 <p>A: 使用 <code>[full]</code> 额外依赖：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>uv<span class="w"> </span>tool<span class="w"> </span>install<span class="w"> </span>ccb<span class="o">[</span>full<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>uv<span class="w"> </span>tool<span class="w"> </span>install<span class="w"> </span>ccb-cli<span class="o">[</span>full<span class="o">]</span>
 </code></pre></div>
 <p>或</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>pip<span class="w"> </span>install<span class="w"> </span>ccb<span class="o">[</span>full<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>pip<span class="w"> </span>install<span class="w"> </span>ccb-cli<span class="o">[</span>full<span class="o">]</span>
 </code></pre></div>
 <h3 id="q-ccb_1">Q: 安装后无法使用 <code>ccb</code> 命令？<a class="headerlink" href="#q-ccb_1" title="Permanent link">&para;</a></h3>
 <p>A: 确保 <code>uv</code> 的工具目录在 PATH 环境变量中。使用 <code>uv</code> 安装的工具通常位于 <code>~/.cargo/bin</code> 或类似位置。</p>
@@ -1664,12 +1664,12 @@
 <p>A: 支持文件夹、CBZ、CBR、CB7、CBT。</p>
 <h3 id="q-rar">Q: 为什么无法处理 RAR 文件？<a class="headerlink" href="#q-rar" title="Permanent link">&para;</a></h3>
 <p>A: RAR 格式需要 <code>rarfile</code> 库。请安装完整版本：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>uv<span class="w"> </span>tool<span class="w"> </span>install<span class="w"> </span>ccb<span class="o">[</span>full<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>uv<span class="w"> </span>tool<span class="w"> </span>install<span class="w"> </span>ccb-cli<span class="o">[</span>full<span class="o">]</span>
 </code></pre></div>
 <p><strong>注意：基于 <code>WinRAR</code> 的商业闭源策略，用户可能需要手动安装 <code>WinRAR</code> 专有软件提供外部命令支持。</strong></p>
 <h3 id="q-7z">Q: 为什么无法处理 7Z 文件？<a class="headerlink" href="#q-7z" title="Permanent link">&para;</a></h3>
 <p>A: 7Z 格式需要 <code>py7zr</code> 库。请安装完整版本：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>uv<span class="w"> </span>tool<span class="w"> </span>install<span class="w"> </span>ccb<span class="o">[</span>full<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>uv<span class="w"> </span>tool<span class="w"> </span>install<span class="w"> </span>ccb-cli<span class="o">[</span>full<span class="o">]</span>
 </code></pre></div>
 <h2 id="_5">错误处理<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <h3 id="q-path-does-not-exist">Q: 遇到 "Path does not exist" 错误？<a class="headerlink" href="#q-path-does-not-exist" title="Permanent link">&para;</a></h3>
