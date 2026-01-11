@@ -15,9 +15,9 @@ from .exceptions import (
 from importlib.metadata import version, PackageNotFoundError
 
 try:
-    __version__ = version("ccb")
+    __version__ = version("ccb-cli")
 except PackageNotFoundError:
-    __version__ = "0.1.0.dev1"
+    __version__ = "0.1.0"
 
 __all__ = [
     "ComicBookConverter",

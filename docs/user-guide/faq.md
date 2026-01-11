@@ -7,13 +7,13 @@
 A: 推荐使用 `uv` 进行安装：
 
 ```bash
-uv tool install ccb
+uv tool install ccb-cli
 ```
 
 或使用 `pip`:
 
 ```bash
-pip install ccb
+pip install ccb-cli
 ```
 
 ### Q: 如何安装完整版本（包含 RAR 和 7Z 支持）？
@@ -21,13 +21,13 @@ pip install ccb
 A: 使用 `[full]` 额外依赖：
 
 ```bash
-uv tool install ccb[full]
+uv tool install ccb-cli[full]
 ```
 
 或
 
 ```bash
-pip install ccb[full]
+pip install ccb-cli[full]
 ```
 
 ### Q: 安装后无法使用 `ccb` 命令？
@@ -101,7 +101,7 @@ A: 支持文件夹、CBZ、CBR、CB7、CBT。
 A: RAR 格式需要 `rarfile` 库。请安装完整版本：
 
 ```bash
-uv tool install ccb[full]
+uv tool install ccb-cli[full]
 ```
 
 **注意：基于 `WinRAR` 的商业闭源策略，用户可能需要手动安装 `WinRAR` 专有软件提供外部命令支持。**
@@ -111,7 +111,7 @@ uv tool install ccb[full]
 A: 7Z 格式需要 `py7zr` 库。请安装完整版本：
 
 ```bash
-uv tool install ccb[full]
+uv tool install ccb-cli[full]
 ```
 
 ## 错误处理

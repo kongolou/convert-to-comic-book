@@ -19,13 +19,13 @@
 
 ```bash
 # 最小安装（仅支持 ZIP 和 TAR）
-pip install ccb
+pip install ccb-cli
 
 # 或使用标准安装
-pip install ccb[standard]
+pip install ccb-cli[standard]
 
 # 完整安装（扩展支持 RAR 和 7Z）
-pip install ccb[full]
+pip install ccb-cli[full]
 ```
 
 ### 基本使用

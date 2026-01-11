@@ -16,7 +16,7 @@ CCB 是一个强大的命令行工具，用于将图片文件夹或压缩包转�
 
 ```bash
 # 安装
-pip install ccb
+pip install ccb-cli
 
 # 转换文件夹为 CBZ
 ccb /path/to/your/comic

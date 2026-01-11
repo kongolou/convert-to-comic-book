@@ -12,13 +12,13 @@
 最小安装仅支持 ZIP 和 TAR 格式：
 
 ```bash
-uv tool install ccb
+uv tool install ccb-cli
 ```
 
 或
 
 ```bash
-uv tool install ccb[standard]
+uv tool install ccb-cli[standard]
 ```
 
 ### 完整安装
@@ -37,10 +37,10 @@ uv tool install ccb[full]
 
 ```bash
 # 最小安装
-pip install ccb
+pip install ccb-cli
 
 # 完整安装
-pip install ccb[full]
+pip install ccb-cli[full]
 ```
 
 ## 验证安装
