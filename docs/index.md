@@ -8,7 +8,7 @@ CCB 是一个强大的命令行工具，用于将图片文件夹或压缩包转�
 
 - 🔄 **多格式支持**: 支持文件夹、CBZ、CBR、CB7、CBT、ZIP、RAR、7Z、TAR 之间的相互转换
 - 🚀 **高性能**: 使用异步处理，支持批量转换
-- 📦 **灵活配置**: 支持递归处理、收集模式、自定义输出等
+- 📦 **灵活配置**: 支持自动识别资源类型、自定义输入输出流等
 - 🛡️ **安全可靠**: 完善的错误处理和日志记录
 - 🌍 **跨平台**: 支持 Windows、Linux、macOS
 
@@ -19,10 +19,10 @@ CCB 是一个强大的命令行工具，用于将图片文件夹或压缩包转�
 pip install ccb
 
 # 转换文件夹为 CBZ
-ccb /path/to/your/folder
+ccb /path/to/your/comic
 
 # 批量转换
-ccb -c /path/to/your/folders
+ccb -c /path/to/your/comics
 ```
 
 ## 文档导航
