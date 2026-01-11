@@ -46,7 +46,7 @@ docs = [
 
 [project.urls]
 Homepage = "https://github.com/kongolou"
-Documentation = "https://convert-to-comic-book.readthedocs.io"
+Documentation = "https://kongolou.github.io/convert-to-comic-book/"
 Repository = "https://github.com/kongolou/convert-to-comic-book.git"
 Issues = "https://github.com/kongolou/convert-to-comic-book/issues"
 Changelog = "https://github.com/kongolou/convert-to-comic-book/blob/main/CHANGELOG.md"
