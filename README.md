@@ -43,7 +43,7 @@ ccb -c /path/to/root_folder
 ccb -c /path/to/root_folder -R
 
 # 指定多个 CBZ 转换为文件夹
-ccb -f cbz -t folder comic_book1.zip comic_book2.zip
+ccb -f cbz -t folder comic_book1.cbz comic_book2.cbz
 
 # 指定导出路径（-F 强制替换同名文件或目录）
 ccb /path/to/source -o /dir/to/output
@@ -104,6 +104,7 @@ ccb [可选参数] <源列表>
 
 本项目使用 [MIT License](LICENSE) 开源协议。
 
-## 相关链接
+## 文档
 
-- [完整文档](https://convert-to-comic-book.readthedocs.io/)
+- [MkDocs](https://kongolou.github.io/convert-to-comic-book/)
+- [Read the Docs](https://convert-to-comic-book.readthedocs.io/)
