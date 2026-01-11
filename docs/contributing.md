@@ -46,10 +46,10 @@ pytest tests/
 
 ```bash
 # 检查代码
-ruff check ccb/
+ruff check
 
 # 格式化代码
-ruff format ccb/
+ruff format
 ```
 
 ## 开发环境设置

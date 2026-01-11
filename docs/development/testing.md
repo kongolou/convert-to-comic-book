@@ -17,7 +17,7 @@ pytest tests/test_converter.py
 ### 运行特定测试
 
 ```bash
-pytest tests/test_converter.py::TestComicBookConverter::test_convert_folder_to_cbz
+pytest tests/test_converter.py::TestComicBookConverter::test_convert_folder_to_archive
 ```
 
 ### 查看测试覆盖率
@@ -30,20 +30,6 @@ pytest --cov=ccb tests/
 
 ```bash
 pytest --cov=ccb --cov-report=html tests/
-```
-
-## 测试结构
-
-```
-tests/
-├── __init__.py
-├── test_file_detector.py      # 文件类型检测测试
-├── test_archive_handler.py    # 压缩/解压处理测试
-├── test_converter.py          # 核心转换测试
-├── test_utils.py              # 工具函数测试
-├── test_cli.py                # CLI 测试（包含带空格/带引号路径的用例）
-├── test_cli_recursive.py      # CLI 递归处理测试
-└── test_cli_combinations.py   # CLI 参数组合测试
 ```
 
 ## 测试覆盖

@@ -15,10 +15,10 @@ logger = logging.getLogger(__name__)
 def safe_remove(path: Path) -> None:
     """
     安全删除文件或文件夹。
-    
+
     Args:
         path: 要删除的路径
-    
+
     Raises:
         Exception: 删除失败时抛出
     """
@@ -37,7 +37,7 @@ def safe_remove(path: Path) -> None:
 def ensure_output_dir(path: Path) -> None:
     """
     确保输出目录存在。
-    
+
     Args:
         path: 输出目录路径（如果是文件路径，则使用其父目录）
     """
@@ -54,12 +54,12 @@ def get_output_path(
 ) -> Path:
     """
     生成输出文件路径。
-    
+
     Args:
         input_path: 输入文件路径
         output_type: 输出类型 (folder, cbz, cbr, cb7, cbt)
         output_dir: 输出目录，如果为None则使用输入文件的目录
-    
+
     Returns:
         输出文件路径
     """

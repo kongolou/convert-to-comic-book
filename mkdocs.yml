@@ -59,9 +59,7 @@ nav:
     - 支持的格式: user-guide/formats.md
     - 常见问题: user-guide/faq.md
   - 开发文档:
-    - 架构设计: development/architecture.md
     - API 参考: development/api.md
-    - 完整 API 文档: api-reference.md
     - 测试: development/testing.md
   - 贡献指南: contributing.md
 

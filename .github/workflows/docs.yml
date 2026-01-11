@@ -22,10 +22,14 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -e ".[docs]"
+        pip install -e pdoc
     
     - name: Build documentation
       run: mkdocs build
-    
+
+    - name: Generate API documentation with pdoc
+      run: pdoc src/ccb -o site/api-reference -d google
+
     - name: Archive built documentation
       uses: actions/upload-artifact@v4
       with:

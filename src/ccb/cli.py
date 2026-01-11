@@ -68,7 +68,7 @@ Examples:
             "tar",
         ],
         default="auto",
-        help="Source type (default: auto).",
+        help="Source type (default: auto)",
     )
 
     parser.add_argument(
@@ -76,7 +76,7 @@ Examples:
         "--to-type",
         choices=["folder", "cbz", "cbr", "cb7", "cbt"],
         default="cbz",
-        help="Target type (default: cbz).",
+        help="Target type (default: cbz)",
     )
 
     parser.add_argument(
@@ -84,29 +84,29 @@ Examples:
         "--output-dir",
         type=str,
         default=None,
-        help="Output directory (default: source directory).",
+        help="Output directory (default: source directory)",
     )
 
     parser.add_argument(
         "-c",
         "--collect",
         action="store_true",
-        help="Collect leaf sources under given paths, and use them as new input.",
+        help="Collect leaf sources under given paths, and use them as new input",
     )
 
     parser.add_argument(
-        "-q", "--quiet", action="store_true", help="Quiet mode: show only errors."
+        "-q", "--quiet", action="store_true", help="Quiet mode: show only errors"
     )
 
     parser.add_argument(
         "-R",
         "--remove",
         action="store_true",
-        help="Remove sources after processing (excluding already matching targets).",
+        help="Remove sources after processing (excluding already matching targets)",
     )
 
     parser.add_argument(
-        "-F", "--force", action="store_true", help="Force replace existing targets."
+        "-F", "--force", action="store_true", help="Force replace existing targets"
     )
 
     parser.add_argument(

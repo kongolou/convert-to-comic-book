@@ -1,106 +1,64 @@
 # 使用示例
 
-假设一位 Linux 用户的 Home 目录下具有如下结构：
+一位 Linux 用户的 Home 目录下具有以下内容：
 ```
-~
-├──awesome one.cbr
-└──comic_books/
-   ├──comic_book1.zip
-   ├──comic_book2/
-   └──comic_book3/
-      ├──chapter1.7z
-      ├──chapter2.cbt
-      └──chapter3/
+.
+├── comic_books
+│   ├── comic_book1.zip
+│   ├── comic_book2
+│   └── comic_book3
+│       ├── chapter1.7z
+│       ├── chapter2.cbt
+│       └── chapter3
+└── my_favorites
+    └── awesome one.cbr
 ```
-## 示例 1: 将 comic_book1.zip 文件夹转换为 comic_book1.cbz
+## 示例 1: 转换 comic_book1.zip 文件为 cbz
 
 ```bash
 ccb ~/comic_books/comic_book1.zip
+# 输出：~/comic_books/comic_book1.cbz
 ```
 
-输出文件: 
-- `~/comic_books/comic_book1.cbz`
-
-## 示例 2: 将 comic_book2 文件夹转换为 comic_book2.cbz
+## 示例 2: 转换 comic_book2 文件夹为 cbz
 
 ```bash
 ccb ~/comic_books/comic_book2
+# 输出：~/comic_books/comic_book2.cbz
 ```
 
-输出文件: 
-- `~/comic_books/comic_book2.cbz`
-
-## 示例 3: 批量转换 chapter1.7z、chapter2.cbt chapter3 文件夹到 cbt 格式
+## 示例 3: 批量转换 comic_book3 的章节到 cbt
 
 ```bash
-ccb -t cbt \
-    ~/comic_books/comic_book3/chapter1.7z \
-    ~/comic_books/comic_book3/chapter2.cbt \
-    ~/comic_books/comic_book3/chapter3
+cd ~/comic_books/comic_book3
+ccb -t cbt chapter1.7z chapter2.cbt chapter3
+# 输出：chapter1.cbt, chapter3.cbt
+# 注意到 chapter2.cbt 不发生转换
 ```
 
-输出文件: 
-- `~/comic_books/comic_book3/chapter1.cbt`
-- `~/comic_books/comic_book3/chapter3.cbt`
-
-注意到 chapter2.cbt 不发生转换
-
-## 示例 4: 批量转换 chapter1.7z、chapter2.cbt chapter3 文件夹到 comic_books 下后删除
+## 示例 4: 处理带有空格的路径
 
 ```bash
-ccb ~/comic_books/comic_book3/chapter1.7z \
-    ~/comic_books/comic_book3/chapter2.cbt \
-    ~/comic_books/comic_book3/chapter3 \
-    -o ~/comic_books \
-    -R
-```
-执行后目录：
-```
-~
-├──awesome one.cbr
-└──comic_books/
-   ├─*chapter1.cbz
-   ├─*chapter2.cbz
-   ├─*chapter3.cbz
-   ├──comic_book1.zip
-   ├──comic_book2/
-   └──comic_book3/
-      └──.
+# 使用引号包裹带有空格的路径
+ccb "~/my_favorites/awesome one.cbr"
+# 输出：~/my_favorites/awesome one.cbz
 ```
 
-## 示例 5：批量转换 comic_books 下的源后删除，静默输出
+## 示例 5：批量转换 Home 下的所有源后删除，静默输出
 
 ```bash
-ccb -c ~/comic_books -q -R
+ccb -c ~ -R -q
 ```
-执行后目录：
+命令完成后，将产生如下结构：
 ```
-~
-├──awesome one.cbr
-└──comic_books/
-   ├─*comic_book1.cbz
-   ├─*comic_book2.cbz
-   └──comic_book3/
-      ├─*chapter1.cbz
-      ├─*chapter2.cbz
-      └─*chapter3.cbz
+.
+├── comic_books
+│   ├── comic_book1.cbz
+│   ├── comic_book2.cbz
+│   └── comic_book3
+│       ├── chapter1.cbz
+│       ├── chapter2.cbz
+│       └── chapter3.cbz
+└── my_favorites
+    └── awesome one.cbz
 ```
-可以看到，使用 `-c` 参数后，命令变简洁了，实际上，上述命令等价于
-```
-ccb ~/comic_books/comic_book1.zip \
-    ~/comic_books/comic_book2 \
-    ~/comic_books/comic_book3/chapter1.7z \
-    ~/comic_books/comic_book3/chapter2.cbt \
-    ~/comic_books/comic_book3/chapter3 \
-    -q -R
-```
-
-## 示例 6: 处理包含空格的路径 
-
-使用引号包裹即可：
-
-```bash
-ccb "~/awesome one.cbr"
-```
-输出文件: 
-- ~/awesome one.cbz

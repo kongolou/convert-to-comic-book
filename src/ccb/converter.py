@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 class ComicBookConverter:
     """漫画书格式转换器类。
-    
+
     支持在不同漫画书格式之间进行转换，包括：
     - 文件夹 <-> CBZ
     - 文件夹 <-> CBR
@@ -31,7 +31,7 @@ class ComicBookConverter:
 
     def __init__(self):
         """初始化转换器实例。
-        
+
         创建临时目录列表，用于跟踪需要清理的临时目录。
         """
         self.temp_dirs = []  # 跟踪临时目录，用于清理
@@ -46,17 +46,17 @@ class ComicBookConverter:
     ) -> Path:
         """
         执行漫画书格式转换。
-        
+
         Args:
             input_path: 输入文件或文件夹路径
             output_type: 输出类型 (folder, cbz, cbr, cb7, cbt)
             output_dir: 输出目录，如果为None则使用输入文件的目录
             remove_source: 是否在转换后删除源文件
             force: 是否强制替换同名的输出文件或目录
-        
+
         Returns:
             输出文件路径
-        
+
         Raises:
             ConversionError: 转换失败时抛出
             UnsupportedFormatError: 不支持的输出格式时抛出
@@ -132,12 +132,12 @@ class ComicBookConverter:
     ) -> Path:
         """
         将文件夹转换为指定类型的压缩包。
-        
+
         Args:
             folder_path: 源文件夹路径
             archive_type: 压缩包类型 (cbz, cbr, cb7, cbt)
             output_path: 输出压缩包路径
-        
+
         Returns:
             输出压缩包路径
         """
@@ -152,11 +152,11 @@ class ComicBookConverter:
     ) -> Path:
         """
         将压缩包转换为文件夹。
-        
+
         Args:
             archive_path: 源压缩包路径
             output_path: 输出文件夹路径
-        
+
         Returns:
             输出文件夹路径
         """
@@ -176,14 +176,14 @@ class ComicBookConverter:
     ) -> Path:
         """
         将压缩包转换为另一种压缩包格式。
-        
+
         这个方法会先将输入压缩包解压到临时目录，然后再压缩为目标格式。
-        
+
         Args:
             input_path: 输入压缩包路径
             output_type: 输出压缩包类型 (cbz, cbr, cb7, cbt)
             output_path: 输出压缩包路径
-        
+
         Returns:
             输出压缩包路径
         """
@@ -213,7 +213,7 @@ class ComicBookConverter:
     def _cleanup_temp_dirs(self) -> None:
         """
         清理所有临时目录。
-        
+
         该方法会尝试删除所有由转换器创建的临时目录，
         处理文件锁定情况，包括重试机制和文件级别的删除。
         """

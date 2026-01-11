@@ -29,8 +29,12 @@ ccb -c /path/to/your/comics
 
 - [快速开始](getting-started/installation.md) - 安装和基本使用
 - [用户指南](user-guide/command-line.md) - 详细的使用说明
-- [开发文档](development/architecture.md) - 架构设计和 API 参考
+- [开发文档](development/api.md) - API 参考
 - [贡献指南](contributing.md) - 如何参与项目
+
+## 文档更新
+
+文档与代码同步更新。如果发现文档问题，请提交 Issue 或 Pull Request。
 
 ## 许可证
 

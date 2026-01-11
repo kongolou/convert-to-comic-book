@@ -82,7 +82,5 @@
 | RAR/CBR | `rarfile >= 4.0` | `pip install rarfile` 或 `uv tool install ccb[full]` |
 | 7Z/CB7 | `py7zr >= 0.21.0` | `pip install py7zr` 或 `uv tool install ccb[full]` |
 
-其中，用户需要手动安装 `WinRAR` 专有软件提供外部命令支持 `RAR/CBR` 格式转换。
-
 其他格式（ZIP/CBZ, TAR/CBT）使用 Python 标准库，无需额外依赖。
 

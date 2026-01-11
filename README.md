@@ -28,10 +28,6 @@ pip install ccb[standard]
 pip install ccb[full]
 ```
 
-**注意**: 完整安装需要以下可选依赖：
-- `rarfile >= 4.0`: 用于 RAR/CBR 支持（需要手动安装 WinRAR 以提供完整的 RAR/CBR 支持）
-- `py7zr >= 0.21.0`: 用于 7Z/CB7 支持
-
 ### 基本使用
 
 ```bash
@@ -82,20 +78,20 @@ ccb /path/to/source -o /dir/to/output -F
 ccb [可选参数] <源列表>
 
 位置参数:
-  源列表                目录或文件 (支持 cbz, cbr, cb7, cbt, zip, rar, 7z, tar).
+  源列表                目录或文件 (支持 cbz, cbr, cb7, cbt, zip, rar, 7z, tar)
 
 选项:
-  -h, --help            显示帮助信息
+  -h, --help            显示帮助信息.
   -f, --from-type {auto,folder,cbz,cbr,cb7,cbt,zip,rar,7z,tar}       
                         指定源类型，默认为`auto`
   -t, --to-type {folder,cbz,cbr,cb7,cbt}         
-                        指定目标类型，默认为`cbz`（与`to-type`类型一致的源将不参与任何执行）
+                        指定目标类型，默认为`cbz`（与`to-type`类型一致的源将不参与转换）
   -o, --output-dir OUTPUT_DIR
                         重定向导出目录（默认行为是导出到源所在目录）
   -c, --collect         搜集源列表中所有的叶文件或不含叶文件的叶目录，并作为新的源列表
   -q, --quiet           静默模式，仅显示错误和摘要信息
-  -R, --remove          处理完成后删除源列表中所有非`to-type`类型的源！
-  -F, --force           强制替换同名的文件或目录！（默认行为是覆盖）
+  -R, --remove          处理完成后删除源列表中所有被转换的源
+  -F, --force           强制替换同名的文件或目录（默认行为是覆盖）
   -v, --version         显示版本信息
 ```
 

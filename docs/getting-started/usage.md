@@ -25,38 +25,12 @@ ccb -t cb7 /path/to/your/folder
 ccb -t cbt /path/to/your/folder
 ```
 
-## 批量转换
-
-使用 `-c` 参数处理所有子文件夹：
-
-```bash
-ccb -c /path/to/your/folders
-```
-
-这将处理指定目录下的所有子文件夹。
-
 ## 指定输出目录
 
 使用 `-o` 参数指定输出目录：
 
 ```bash
-ccb /path/to/input -o /path/to/output
-```
-
-## 删除源文件
-
-使用 `--remove` 参数在转换后删除源文件（请谨慎使用）：
-
-```bash
-ccb -t cbt /path/to/your/comic.cb7 --remove
-```
-
-## 静默模式
-
-使用 `-q` 参数启用静默模式，仅显示错误和摘要：
-
-```bash
-ccb -q /path/to/your/folder
+ccb /path/to/source -o /dir/to/output
 ```
 
 ## 查看帮助

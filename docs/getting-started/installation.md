@@ -30,7 +30,7 @@ uv tool install ccb[full]
 ```
 
 完整安装将安装以下可选依赖：
-- `rarfile >= 4.0`: 用于 RAR/CBR 支持（需要手动安装 WinRAR 以提供完整的 RAR/CBR 支持）
+- `rarfile >= 4.0`: 用于 RAR/CBR 支持
 - `py7zr >= 0.21.0`: 用于 7Z/CB7 支持
 
 ## 使用 pip 安装
@@ -53,7 +53,7 @@ ccb --version
 
 应该显示版本信息，例如：
 ```
-ccb v0.1.0
+Convert to Comic Book v1.0.0
 ```
 
 ## 下一步
