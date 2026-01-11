@@ -1,5 +1,7 @@
 """
 核心转换模块
+
+该模块提供了漫画书格式转换的核心功能，支持在不同格式之间进行转换。
 """
 
 import shutil
@@ -17,10 +19,21 @@ logger = logging.getLogger(__name__)
 
 
 class ComicBookConverter:
-    """漫画书格式转换器"""
+    """漫画书格式转换器类。
+    
+    支持在不同漫画书格式之间进行转换，包括：
+    - 文件夹 <-> CBZ
+    - 文件夹 <-> CBR
+    - 文件夹 <-> CB7
+    - 文件夹 <-> CBT
+    - 压缩包格式之间的转换
+    """
 
     def __init__(self):
-        """初始化转换器"""
+        """初始化转换器实例。
+        
+        创建临时目录列表，用于跟踪需要清理的临时目录。
+        """
         self.temp_dirs = []  # 跟踪临时目录，用于清理
 
     def convert(
@@ -32,17 +45,21 @@ class ComicBookConverter:
         force: bool = False,
     ) -> Path:
         """
-        执行转换
-
+        执行漫画书格式转换。
+        
         Args:
             input_path: 输入文件或文件夹路径
             output_type: 输出类型 (folder, cbz, cbr, cb7, cbt)
             output_dir: 输出目录，如果为None则使用输入文件的目录
-            remove_source: 是否删除源文件
+            remove_source: 是否在转换后删除源文件
             force: 是否强制替换同名的输出文件或目录
-
+        
         Returns:
             输出文件路径
+        
+        Raises:
+            ConversionError: 转换失败时抛出
+            UnsupportedFormatError: 不支持的输出格式时抛出
         """
         if not input_path.exists():
             raise ConversionError(f"Input path does not exist: {input_path}")
@@ -114,13 +131,13 @@ class ComicBookConverter:
         output_path: Path,
     ) -> Path:
         """
-        将文件夹转换为压缩包
-
+        将文件夹转换为指定类型的压缩包。
+        
         Args:
-            folder_path: 文件夹路径
+            folder_path: 源文件夹路径
             archive_type: 压缩包类型 (cbz, cbr, cb7, cbt)
             output_path: 输出压缩包路径
-
+        
         Returns:
             输出压缩包路径
         """
@@ -134,12 +151,12 @@ class ComicBookConverter:
         output_path: Path,
     ) -> Path:
         """
-        将压缩包转换为文件夹
-
+        将压缩包转换为文件夹。
+        
         Args:
-            archive_path: 压缩包路径
+            archive_path: 源压缩包路径
             output_path: 输出文件夹路径
-
+        
         Returns:
             输出文件夹路径
         """
@@ -158,13 +175,15 @@ class ComicBookConverter:
         output_path: Path,
     ) -> Path:
         """
-        将压缩包转换为另一种压缩包格式
-
+        将压缩包转换为另一种压缩包格式。
+        
+        这个方法会先将输入压缩包解压到临时目录，然后再压缩为目标格式。
+        
         Args:
             input_path: 输入压缩包路径
             output_type: 输出压缩包类型 (cbz, cbr, cb7, cbt)
             output_path: 输出压缩包路径
-
+        
         Returns:
             输出压缩包路径
         """
@@ -192,7 +211,12 @@ class ComicBookConverter:
             raise
 
     def _cleanup_temp_dirs(self) -> None:
-        """清理临时目录"""
+        """
+        清理所有临时目录。
+        
+        该方法会尝试删除所有由转换器创建的临时目录，
+        处理文件锁定情况，包括重试机制和文件级别的删除。
+        """
         for temp_dir in self.temp_dirs:
             try:
                 shutil.rmtree(temp_dir)

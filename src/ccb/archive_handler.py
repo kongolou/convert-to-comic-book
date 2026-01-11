@@ -1,5 +1,7 @@
 """
 压缩/解压处理模块
+
+该模块提供了处理各种压缩格式的抽象基类和具体实现，支持漫画书格式如CBZ、CBR、CB7、CBT等。
 """
 
 import zipfile
@@ -18,49 +20,69 @@ logger = logging.getLogger(__name__)
 
 
 class ArchiveHandler(ABC):
-    """压缩包处理器抽象基类"""
+    """压缩包处理器抽象基类。
+    
+    定义了压缩、解压和验证压缩包的接口，具体实现类需要继承此类并实现这些方法。
+    """
 
     @abstractmethod
     def extract(self, archive_path: Path, output_path: Path) -> None:
         """
-        解压压缩包
-
+        解压压缩包到指定目录。
+        
         Args:
-            archive_path: 压缩包路径
+            archive_path: 压缩包文件路径
             output_path: 输出目录路径
+        
+        Raises:
+            ArchiveError: 解压失败时抛出
         """
         pass
 
     @abstractmethod
     def compress(self, source_path: Path, archive_path: Path) -> None:
         """
-        压缩文件或文件夹
-
+        将源文件或文件夹压缩为压缩包。
+        
         Args:
             source_path: 源文件或文件夹路径
             archive_path: 输出压缩包路径
+        
+        Raises:
+            ArchiveError: 压缩失败时抛出
         """
         pass
 
     @abstractmethod
     def is_valid(self, archive_path: Path) -> bool:
         """
-        验证压缩包是否有效
-
+        验证压缩包是否有效。
+        
         Args:
-            archive_path: 压缩包路径
-
+            archive_path: 压缩包文件路径
+        
         Returns:
-            如果有效返回True
+            如果压缩包有效则返回True，否则返回False
         """
         pass
 
 
 class ZipHandler(ArchiveHandler):
-    """ZIP/CBZ 处理器"""
+    """ZIP/CBZ 格式处理器。
+    
+    处理标准ZIP压缩格式和漫画书CBZ格式。
+    """
 
     def extract(self, archive_path: Path, output_path: Path) -> None:
-        """解压 ZIP/CBZ 文件"""
+        """解压 ZIP/CBZ 文件到指定目录。
+        
+        Args:
+            archive_path: ZIP/CBZ 压缩包路径
+            output_path: 输出目录路径
+        
+        Raises:
+            ArchiveError: 解压失败时抛出
+        """
         try:
             output_path.mkdir(parents=True, exist_ok=True)
             with zipfile.ZipFile(archive_path, "r") as zipf:
@@ -70,7 +92,15 @@ class ZipHandler(ArchiveHandler):
             raise ArchiveError(f"Failed to extract ZIP archive {archive_path}: {e}")
 
     def compress(self, source_path: Path, archive_path: Path) -> None:
-        """压缩为 ZIP/CBZ 文件"""
+        """将源文件或文件夹压缩为 ZIP/CBZ 格式。
+        
+        Args:
+            source_path: 源文件或文件夹路径
+            archive_path: 输出 ZIP/CBZ 文件路径
+        
+        Raises:
+            ArchiveError: 压缩失败时抛出
+        """
         try:
             # 确保输出目录存在
             archive_path.parent.mkdir(parents=True, exist_ok=True)
@@ -90,7 +120,14 @@ class ZipHandler(ArchiveHandler):
             raise ArchiveError(f"Failed to create ZIP archive {archive_path}: {e}")
 
     def is_valid(self, archive_path: Path) -> bool:
-        """验证 ZIP/CBZ 文件是否有效"""
+        """验证 ZIP/CBZ 文件是否有效。
+        
+        Args:
+            archive_path: ZIP/CBZ 压缩包路径
+        
+        Returns:
+            如果文件有效返回True，否则返回False
+        """
         try:
             with zipfile.ZipFile(archive_path, "r") as zipf:
                 zipf.testzip()
@@ -100,10 +137,21 @@ class ZipHandler(ArchiveHandler):
 
 
 class TarHandler(ArchiveHandler):
-    """TAR/CBT 处理器"""
+    """TAR/CBT 格式处理器。
+    
+    处理标准TAR压缩格式和漫画书CBT格式。
+    """
 
     def extract(self, archive_path: Path, output_path: Path) -> None:
-        """解压 TAR/CBT 文件"""
+        """解压 TAR/CBT 文件到指定目录。
+        
+        Args:
+            archive_path: TAR/CBT 压缩包路径
+            output_path: 输出目录路径
+        
+        Raises:
+            ArchiveError: 解压失败时抛出
+        """
         try:
             output_path.mkdir(parents=True, exist_ok=True)
             with tarfile.open(archive_path, "r:*") as tar:
@@ -113,7 +161,15 @@ class TarHandler(ArchiveHandler):
             raise ArchiveError(f"Failed to extract TAR archive {archive_path}: {e}")
 
     def compress(self, source_path: Path, archive_path: Path) -> None:
-        """压缩为 TAR/CBT 文件"""
+        """将源文件或文件夹压缩为 TAR/CBT 格式。
+        
+        Args:
+            source_path: 源文件或文件夹路径
+            archive_path: 输出 TAR/CBT 文件路径
+        
+        Raises:
+            ArchiveError: 压缩失败时抛出
+        """
         try:
             # 确保输出目录存在
             archive_path.parent.mkdir(parents=True, exist_ok=True)
@@ -130,7 +186,14 @@ class TarHandler(ArchiveHandler):
             raise ArchiveError(f"Failed to create TAR archive {archive_path}: {e}")
 
     def is_valid(self, archive_path: Path) -> bool:
-        """验证 TAR/CBT 文件是否有效"""
+        """验证 TAR/CBT 文件是否有效。
+        
+        Args:
+            archive_path: TAR/CBT 压缩包路径
+        
+        Returns:
+            如果文件有效返回True，否则返回False
+        """
         try:
             with tarfile.open(archive_path, "r:*") as tar:
                 tar.getmembers()
@@ -140,9 +203,17 @@ class TarHandler(ArchiveHandler):
 
 
 class RarHandler(ArchiveHandler):
-    """RAR/CBR 处理器（需要 rarfile 库）"""
+    """RAR/CBR 格式处理器。
+    
+    处理标准RAR压缩格式和漫画书CBR格式。
+    需要安装rarfile库或有外部unrar/rar/winrar工具。
+    """
 
     def __init__(self):
+        """初始化RAR处理器。
+        
+        尝试导入rarfile库，如果导入失败则检测外部RAR工具。
+        """
         self._has_rarfile = False
         try:
             import rarfile
@@ -175,7 +246,17 @@ class RarHandler(ArchiveHandler):
             )
 
     def extract(self, archive_path: Path, output_path: Path) -> None:
-        """解压 RAR/CBR 文件"""
+        """解压 RAR/CBR 文件到指定目录。
+        
+        优先使用外部提取工具(WinRAR/unrar/rar)，如果没有则使用rarfile库。
+        
+        Args:
+            archive_path: RAR/CBR 压缩包路径
+            output_path: 输出目录路径
+        
+        Raises:
+            ArchiveError: 解压失败时抛出
+        """
         # Prefer external extractor (WinRAR/unrar/rar) if available
         if self._external_tool:
             output_path.mkdir(parents=True, exist_ok=True)
@@ -293,7 +374,15 @@ class RarHandler(ArchiveHandler):
             raise ArchiveError(f"Failed to extract RAR archive {archive_path}: {e}")
 
     def compress(self, source_path: Path, archive_path: Path) -> None:
-        """压缩为 RAR/CBR 文件"""
+        """将源文件或文件夹压缩为 RAR/CBR 格式。
+        
+        Args:
+            source_path: 源文件或文件夹路径
+            archive_path: 输出 RAR/CBR 文件路径
+        
+        Raises:
+            ArchiveError: 压缩失败时抛出
+        """
         # RAR 格式通常需要外部工具，这里使用临时 ZIP 然后重命名
         # 或者提示用户需要安装 WinRAR/7-Zip
         raise ArchiveError(
@@ -301,7 +390,14 @@ class RarHandler(ArchiveHandler):
         )
 
     def is_valid(self, archive_path: Path) -> bool:
-        """验证 RAR/CBR 文件是否有效"""
+        """验证 RAR/CBR 文件是否有效。
+        
+        Args:
+            archive_path: RAR/CBR 压缩包路径
+        
+        Returns:
+            如果文件有效返回True，否则返回False
+        """
         # If external tool available, use it to test the archive
         if self._external_tool:
             try:
@@ -351,9 +447,17 @@ class RarHandler(ArchiveHandler):
 
 
 class SevenZipHandler(ArchiveHandler):
-    """7Z/CB7 处理器（需要 py7zr 库）"""
+    """7Z/CB7 格式处理器。
+    
+    处理标准7Z压缩格式和漫画书CB7格式。
+    需要安装py7zr库。
+    """
 
     def __init__(self):
+        """初始化7Z处理器。
+        
+        尝试导入py7zr库，如果导入失败则禁用7Z支持。
+        """
         self._has_py7zr = False
         try:
             import py7zr
@@ -364,7 +468,15 @@ class SevenZipHandler(ArchiveHandler):
             logger.warning("py7zr not installed, 7Z/CB7 support unavailable")
 
     def extract(self, archive_path: Path, output_path: Path) -> None:
-        """解压 7Z/CB7 文件"""
+        """解压 7Z/CB7 文件到指定目录。
+        
+        Args:
+            archive_path: 7Z/CB7 压缩包路径
+            output_path: 输出目录路径
+        
+        Raises:
+            ArchiveError: 解压失败时抛出
+        """
         if not self._has_py7zr:
             raise ArchiveError("py7zr library is required for 7Z/CB7 support")
         try:
@@ -376,7 +488,15 @@ class SevenZipHandler(ArchiveHandler):
             raise ArchiveError(f"Failed to extract 7Z archive {archive_path}: {e}")
 
     def compress(self, source_path: Path, archive_path: Path) -> None:
-        """压缩为 7Z/CB7 文件"""
+        """将源文件或文件夹压缩为 7Z/CB7 格式。
+        
+        Args:
+            source_path: 源文件或文件夹路径
+            archive_path: 输出 7Z/CB7 文件路径
+        
+        Raises:
+            ArchiveError: 压缩失败时抛出
+        """
         if not self._has_py7zr:
             raise ArchiveError("py7zr library is required for 7Z/CB7 support")
         try:
@@ -398,7 +518,14 @@ class SevenZipHandler(ArchiveHandler):
             raise ArchiveError(f"Failed to create 7Z archive {archive_path}: {e}")
 
     def is_valid(self, archive_path: Path) -> bool:
-        """验证 7Z/CB7 文件是否有效"""
+        """验证 7Z/CB7 文件是否有效。
+        
+        Args:
+            archive_path: 7Z/CB7 压缩包路径
+        
+        Returns:
+            如果文件有效返回True，否则返回False
+        """
         if not self._has_py7zr:
             return False
         try:
@@ -411,13 +538,16 @@ class SevenZipHandler(ArchiveHandler):
 
 def get_handler(archive_type: str) -> ArchiveHandler:
     """
-    根据压缩包类型获取对应的处理器
-
+    根据压缩包类型获取对应的处理器实例。
+    
     Args:
         archive_type: 压缩包类型 (cbz, cbr, cb7, cbt, zip, rar, 7z, tar)
-
+    
     Returns:
-        对应的处理器实例
+        对应的ArchiveHandler子类实例
+    
+    Raises:
+        ArchiveError: 如果压缩包类型不被支持
     """
     handler_map = {
         "zip": ZipHandler,

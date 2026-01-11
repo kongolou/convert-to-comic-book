@@ -1,27 +1,39 @@
 """
-自定义异常类
+自定义异常类模块
 """
 
 
 class ComicBookError(Exception):
-    """基础异常类"""
-
+    """所有CCB异常的基类。
+    
+    Attributes:
+        message (str): 异常消息
+    """
     pass
 
 
 class UnsupportedFormatError(ComicBookError):
-    """不支持的格式异常"""
-
+    """当输入或输出格式不被支持时抛出。
+    
+    Attributes:
+        message (str): 异常消息
+    """
     pass
 
 
 class ArchiveError(ComicBookError):
-    """压缩包处理错误"""
-
+    """当压缩或解压操作失败时抛出。
+    
+    Attributes:
+        message (str): 异常消息
+    """
     pass
 
 
 class ConversionError(ComicBookError):
-    """转换错误"""
-
+    """当转换操作失败时抛出。
+    
+    Attributes:
+        message (str): 异常消息
+    """
     pass
