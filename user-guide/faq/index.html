@@ -18,7 +18,7 @@
         <link rel="prev" href="../formats/">
       
       
-        <link rel="next" href="../../development/architecture/">
+        <link rel="next" href="../../development/api/">
       
       
         
@@ -292,7 +292,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../development/architecture/" class="md-tabs__link">
+        <a href="../../development/api/" class="md-tabs__link">
           
   
   
@@ -1140,34 +1140,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../development/architecture/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    架构设计
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../development/api/" class="md-nav__link">
         
   
@@ -1176,34 +1148,6 @@
     
   
     API 参考
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api-reference/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    完整 API 文档
   
 
     
@@ -1700,7 +1644,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>ccb<span class="w"> </span>-c<span class="w"> </span>/path/to/folders
 </code></pre></div>
 <h3 id="q_2">Q: 收集模式如何工作？<a class="headerlink" href="#q_2" title="Permanent link">&para;</a></h3>
-<p>A: <code>-c</code> 参数的作用是搜集源列表中所有非<code>to-type</code>类型的叶子文件（或不含叶子文件的叶子目录）</p>
+<p>A: <code>-c</code> 参数的作用是搜集源列表中所有的叶文件或不含叶文件的叶目录，并作为新的源列表</p>
 <h3 id="q_3">Q: 如何查看详细日志？<a class="headerlink" href="#q_3" title="Permanent link">&para;</a></h3>
 <p>A: 默认情况下会显示 INFO 级别的日志。使用 <code>-q</code> 参数可以启用静默模式，仅显示错误和摘要。</p>
 <h3 id="q_4">Q: 如何指定输出目录？<a class="headerlink" href="#q_4" title="Permanent link">&para;</a></h3>
@@ -1722,7 +1666,7 @@
 <p>A: RAR 格式需要 <code>rarfile</code> 库。请安装完整版本：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>uv<span class="w"> </span>tool<span class="w"> </span>install<span class="w"> </span>ccb<span class="o">[</span>full<span class="o">]</span>
 </code></pre></div>
-<p><strong>注意：用户需要手动安装 <code>WinRAR</code> 专有软件提供外部命令支持。</strong></p>
+<p><strong>注意：基于 <code>WinRAR</code> 的商业闭源策略，用户可能需要手动安装 <code>WinRAR</code> 专有软件提供外部命令支持。</strong></p>
 <h3 id="q-7z">Q: 为什么无法处理 7Z 文件？<a class="headerlink" href="#q-7z" title="Permanent link">&para;</a></h3>
 <p>A: 7Z 格式需要 <code>py7zr</code> 库。请安装完整版本：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>uv<span class="w"> </span>tool<span class="w"> </span>install<span class="w"> </span>ccb<span class="o">[</span>full<span class="o">]</span>

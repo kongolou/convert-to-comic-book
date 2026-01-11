@@ -292,7 +292,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../development/architecture/" class="md-tabs__link">
+        <a href="../../development/api/" class="md-tabs__link">
           
   
   
@@ -572,7 +572,7 @@
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        批量转换
+        指定输出目录
       
     </span>
   </a>
@@ -583,39 +583,6 @@
   <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        指定输出目录
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        删除源文件
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        静默模式
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
-    <span class="md-ellipsis">
-      
         查看帮助
       
     </span>
@@ -624,7 +591,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         下一步
@@ -884,34 +851,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../development/architecture/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    架构设计
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../development/api/" class="md-nav__link">
         
   
@@ -920,34 +859,6 @@
     
   
     API 参考
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api-reference/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    完整 API 文档
   
 
     
@@ -1075,7 +986,7 @@
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        批量转换
+        指定输出目录
       
     </span>
   </a>
@@ -1086,39 +997,6 @@
   <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        指定输出目录
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        删除源文件
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        静默模式
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
-    <span class="md-ellipsis">
-      
         查看帮助
       
     </span>
@@ -1127,7 +1005,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         下一步
@@ -1174,28 +1052,15 @@
 <a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1"># 转换为 CBT</span>
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>ccb<span class="w"> </span>-t<span class="w"> </span>cbt<span class="w"> </span>/path/to/your/folder
 </code></pre></div>
-<h2 id="_4">批量转换<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
-<p>使用 <code>-c</code> 参数处理所有子文件夹：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>ccb<span class="w"> </span>-c<span class="w"> </span>/path/to/your/folders
-</code></pre></div>
-<p>这将处理指定目录下的所有子文件夹。</p>
-<h2 id="_5">指定输出目录<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<h2 id="_4">指定输出目录<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <p>使用 <code>-o</code> 参数指定输出目录：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>ccb<span class="w"> </span>/path/to/input<span class="w"> </span>-o<span class="w"> </span>/path/to/output
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>ccb<span class="w"> </span>/path/to/source<span class="w"> </span>-o<span class="w"> </span>/dir/to/output
 </code></pre></div>
-<h2 id="_6">删除源文件<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
-<p>使用 <code>--remove</code> 参数在转换后删除源文件（请谨慎使用）：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>ccb<span class="w"> </span>-t<span class="w"> </span>cbt<span class="w"> </span>/path/to/your/comic.cb7<span class="w"> </span>--remove
-</code></pre></div>
-<h2 id="_7">静默模式<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
-<p>使用 <code>-q</code> 参数启用静默模式，仅显示错误和摘要：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>ccb<span class="w"> </span>-q<span class="w"> </span>/path/to/your/folder
-</code></pre></div>
-<h2 id="_8">查看帮助<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
+<h2 id="_5">查看帮助<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <p>使用 <code>-h</code> 或 <code>--help</code> 查看完整的帮助信息：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>ccb<span class="w"> </span>-h
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>ccb<span class="w"> </span>-h
 </code></pre></div>
-<h2 id="_9">下一步<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
+<h2 id="_6">下一步<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <p>查看<a href="../examples/">使用示例</a>了解更多高级用法。</p>
 
 
