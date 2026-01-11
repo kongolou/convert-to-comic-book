@@ -106,5 +106,5 @@ ccb [可选参数] <源列表>
 
 ## 文档
 
-- [MkDocs](https://kongolou.github.io/convert-to-comic-book/)
+- [GitHub Pages](https://kongolou.github.io/convert-to-comic-book/)
 - [Read the Docs](https://convert-to-comic-book.readthedocs.io/)
