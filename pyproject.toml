@@ -4,11 +4,9 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ccb-cli"
-version = "2.0.11"
+version = "2.1.0"
 dependencies = []
 requires-python = ">=3.10"
-package-dir = {"" = "src"}
-packages = ["ccb"]
 authors = [
   {name = "kongolou", email = "kongolou@163.com"}
 ]
@@ -55,10 +53,8 @@ Changelog = "https://github.com/kongolou/convert-to-comic-book/blob/main/CHANGEL
 [project.scripts]
 ccb = "ccb.cli:main"
 
-[tool.hatch.build]
-sources = ["src"]
 [tool.hatch.build.targets.wheel]
-packages = ["ccb"]
+packages = ["src/ccb"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -47,6 +47,22 @@ def ensure_output_dir(path: Path) -> None:
     logger.debug(f"Ensured output directory: {path}")
 
 
+def is_empty_directory(path: Path) -> bool:
+    """
+    判断文件夹是否为空。
+
+    Args:
+        path: 要检查的文件夹路径
+
+    Returns:
+        如果文件夹为空返回True，否则返回False
+    """
+    if not path.is_dir():
+        return False
+    
+    return not any(path.iterdir())
+
+
 def get_output_path(
     input_path: Path,
     output_type: str,

@@ -12,7 +12,7 @@ import tempfile
 
 from .file_detector import detect_file_type, get_comic_format, is_valid_comic_format
 from .archive_handler import get_handler
-from .utils import get_output_path, safe_remove
+from .utils import get_output_path, safe_remove, is_empty_directory
 from .exceptions import ConversionError, UnsupportedFormatError
 
 logger = logging.getLogger(__name__)
@@ -76,6 +76,11 @@ class ComicBookConverter:
         # 如果输入和输出类型相同，直接返回
         if input_type == output_type:
             logger.info(f"Input and output types are the same, skipping conversion")
+            return input_path
+            
+        # 如果输入为空目录，直接返回
+        if input_type == "folder" and is_empty_directory(input_path):
+            logger.info(f"{input_path} is empty, skipping conversion")
             return input_path
 
         # 生成输出路径
