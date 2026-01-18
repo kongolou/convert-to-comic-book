@@ -1,4 +1,13 @@
 # CHANGELOG
+## [2.2.0] - 2026-01-20
+### Added
+- 解决了[issues#2 Can't convert to cbr](https://github.com/26350/convert-to-comic-book/issues/2)
+
+## [2.1.0] - 2026-01-18
+### Added
+- 解决了[issues#1 空文件夹被识别为有效的源](https://github.com/26350/convert-to-comic-book/issues/1)
+- 修复项目文件
+
 ## [2.0.11] - 2026-01-11
 ### Updated
 - 解决安装后`ccb`命令无法找到模块的问题

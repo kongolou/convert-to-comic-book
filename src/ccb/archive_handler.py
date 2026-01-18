@@ -206,49 +206,33 @@ class RarHandler(ArchiveHandler):
     """RAR/CBR 格式处理器。
 
     处理标准RAR压缩格式和漫画书CBR格式。
-    需要安装rarfile库或有外部unrar/rar/winrar工具。
+    需要手动安装WinRAR软件，将其安装路径添加到环境变量Path，以调用rar命令。
+    需要安装rarfile库，用于在没有外部命令rar时提供基础的解压缩功能。
     """
 
     def __init__(self):
-        """初始化RAR处理器。
+        """初始化 RAR 处理器。
 
-        尝试导入rarfile库，如果导入失败则检测外部RAR工具。
+        检测外部命令rar，否则尝试导入rarfile库。
         """
-        self._has_rarfile = False
-        try:
-            import rarfile
-
-            self.rarfile = rarfile
-            self._has_rarfile = True
-        except ImportError:
-            logger.warning("rarfile not installed, RAR/CBR support unavailable")
-        # Detect external unrar/rar/winrar command (prefer in that order)
-        self._external_tool = (
-            shutil.which("unrar") or shutil.which("rar") or shutil.which("winrar")
-        )
-        self._external_tool_kind = None
+        self._external_tool = shutil.which("rar")
         if self._external_tool:
-            # determine kind to adjust flags if necessary
+            logger.debug(f"Found external rar command: {self._external_tool}")
+        else:
+            logger.warning("rar command not found, using rarfile library instead")
+            self._has_rarfile = False
             try:
-                tool_name = Path(self._external_tool).stem.lower()
-            except Exception:
-                tool_name = self._external_tool.lower()
-            if "unrar" in tool_name:
-                self._external_tool_kind = "unrar"
-            elif "winrar" in tool_name:
-                self._external_tool_kind = "winrar"
-            elif tool_name.endswith("rar"):
-                self._external_tool_kind = "rar"
-            else:
-                self._external_tool_kind = "unknown"
-            logger.debug(
-                f"Found external RAR extractor: {self._external_tool} (kind={self._external_tool_kind})"
-            )
+                import rarfile
+
+                self.rarfile = rarfile
+                self._has_rarfile = True
+            except ImportError:
+                logger.warning("rarfile not installed, RAR/CBR support unavailable")
 
     def extract(self, archive_path: Path, output_path: Path) -> None:
         """解压 RAR/CBR 文件到指定目录。
 
-        优先使用外部提取工具(WinRAR/unrar/rar)，如果没有则使用rarfile库。
+        优先使用外部命令 rar，如果没有则使用 rarfile 库。
 
         Args:
             archive_path: RAR/CBR 压缩包路径
@@ -257,61 +241,31 @@ class RarHandler(ArchiveHandler):
         Raises:
             ArchiveError: 解压失败时抛出
         """
-        # Prefer external extractor (WinRAR/unrar/rar) if available
         if self._external_tool:
             output_path.mkdir(parents=True, exist_ok=True)
-            kind = self._external_tool_kind
             # build candidate commands to try (primary, alternatives, minimal)
-            cmds = []
-            if kind == "unrar":
-                cmds.append(
-                    [
-                        self._external_tool,
-                        "x",
-                        "-o+",
-                        str(archive_path),
-                        str(output_path),
-                    ]
-                )
-                cmds.append(
-                    [
-                        self._external_tool,
-                        "x",
-                        "-y",
-                        str(archive_path),
-                        str(output_path),
-                    ]
-                )
-                cmds.append(
-                    [self._external_tool, "x", str(archive_path), str(output_path)]
-                )
-            elif kind in ("winrar", "rar"):
-                cmds.append(
-                    [
-                        self._external_tool,
-                        "x",
-                        "-y",
-                        str(archive_path),
-                        str(output_path),
-                    ]
-                )
-                # WinRAR accepts '/y' on some installs
-                cmds.append(
-                    [
-                        self._external_tool,
-                        "x",
-                        "/y",
-                        str(archive_path),
-                        str(output_path),
-                    ]
-                )
-                cmds.append(
-                    [self._external_tool, "x", str(archive_path), str(output_path)]
-                )
-            else:
-                cmds.append(
-                    [self._external_tool, "x", str(archive_path), str(output_path)]
-                )
+            cmds = [
+                [
+                    self._external_tool,
+                    "x",
+                    "-y",
+                    str(archive_path),
+                    str(output_path),
+                ],
+                [
+                    self._external_tool,
+                    "x",
+                    "/y",
+                    str(archive_path),
+                    str(output_path),
+                ],
+                [
+                    self._external_tool,
+                    "x",
+                    str(archive_path),
+                    str(output_path),
+                ],
+            ]
 
             # helper to run a single command and return (returncode, stdout, stderr, timeout_flag)
             def _run(cmd, timeout_sec=120):
@@ -361,17 +315,18 @@ class RarHandler(ArchiveHandler):
             logger.debug(f"External extractor attempts failed: {msg}")
 
         # Fallback to rarfile library if present
-        if not self._has_rarfile:
+        elif self._has_rarfile:
+            try:
+                output_path.mkdir(parents=True, exist_ok=True)
+                with self.rarfile.RarFile(str(archive_path)) as rar:
+                    rar.extractall(str(output_path))
+                logger.debug(f"Extracted {archive_path} to {output_path} using rarfile")
+            except Exception as e:
+                raise ArchiveError(f"Failed to extract RAR archive {archive_path}: {e}")
+        else:
             raise ArchiveError(
-                "rarfile library is required for RAR/CBR support or install WinRAR/unrar"
+                "rar command or rarfile library is required for RAR/CBR support"
             )
-        try:
-            output_path.mkdir(parents=True, exist_ok=True)
-            with self.rarfile.RarFile(str(archive_path)) as rar:
-                rar.extractall(str(output_path))
-            logger.debug(f"Extracted {archive_path} to {output_path} using rarfile")
-        except Exception as e:
-            raise ArchiveError(f"Failed to extract RAR archive {archive_path}: {e}")
 
     def compress(self, source_path: Path, archive_path: Path) -> None:
         """将源文件或文件夹压缩为 RAR/CBR 格式。
@@ -383,11 +338,62 @@ class RarHandler(ArchiveHandler):
         Raises:
             ArchiveError: 压缩失败时抛出
         """
-        # RAR 格式通常需要外部工具，这里使用临时 ZIP 然后重命名
-        # 或者提示用户需要安装 WinRAR/7-Zip
-        raise ArchiveError(
-            "RAR compression requires external tools. Use ZIP/CBZ instead."
-        )
+        # RAR 压缩需要外部命令 rar
+        if not self._external_tool:
+            raise ArchiveError(
+                "RAR compression requires rar command. Install WinRAR or use ZIP/CBZ instead."
+            )
+
+        cmds = [
+            [
+                self._external_tool,
+                "a",
+                "-r",
+                str(archive_path),
+                str(source_path),
+            ],
+            [
+                self._external_tool,
+                "a",
+                "/r",
+                str(archive_path),
+                str(source_path),
+            ],
+        ]
+
+        # helper to run a single command and return (returncode, stdout, stderr, timeout_flag)
+        def _run(cmd, timeout_sec=300):
+            try:
+                completed = subprocess.run(
+                    cmd,
+                    check=False,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    timeout=timeout_sec,
+                )
+                out_s = completed.stdout.decode(errors="ignore") if completed.stdout else ""
+                err_s = completed.stderr.decode(errors="ignore") if completed.stderr else ""
+                return completed.returncode, out_s, err_s, False
+            except subprocess.TimeoutExpired as e:
+                return -1, "", f"Timeout after {e.timeout}s", True
+            except FileNotFoundError as e:
+                return -2, "", str(e), False
+
+        last_err = None
+        for cmd in cmds:
+            rc, out, err, timed_out = _run(cmd)
+            if rc == 0:
+                logger.debug(f"Compressed {source_path} to {archive_path} using external tool {cmd}")
+                return
+            # if timed out, raise immediately
+            if timed_out:
+                raise ArchiveError(f"External compressor timeout for {source_path}")
+            # record last non-empty error
+            last_err = err or out or last_err
+
+        # all external attempts failed
+        msg = (last_err or f"external tool exited with non-zero code using {self._external_tool}").strip()
+        raise ArchiveError(f"Failed to compress {source_path} to {archive_path}: {msg}")
 
     def is_valid(self, archive_path: Path) -> bool:
         """验证 RAR/CBR 文件是否有效。
@@ -403,10 +409,6 @@ class RarHandler(ArchiveHandler):
             try:
                 # try a few variants for the test command
                 test_cmds = [[self._external_tool, "t", str(archive_path)]]
-                if self._external_tool_kind in ("winrar", "rar"):
-                    test_cmds.append(
-                        [self._external_tool, "t", "/p", str(archive_path)]
-                    )
                 for cmd in test_cmds:
                     try:
                         completed = subprocess.run(
@@ -436,13 +438,14 @@ class RarHandler(ArchiveHandler):
                 logger.debug(f"External extractor test error for {archive_path}: {e}")
                 return False
 
-        if not self._has_rarfile:
-            return False
-        try:
-            with self.rarfile.RarFile(archive_path) as rar:
-                rar.testrar()
-            return True
-        except Exception:
+        elif self._has_rarfile:
+            try:
+                with self.rarfile.RarFile(archive_path) as rar:
+                    rar.testrar()
+                return True
+            except Exception:
+                return False
+        else:
             return False
 
 
