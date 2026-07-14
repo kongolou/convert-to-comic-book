@@ -1,4 +1,16 @@
 # CHANGELOG
+
+## [2.3.0] - 2026-07-14
+
+### Added
+- 新增 `-d`/`--depth` 命令行参数，用于仅处理输入目录指定深度层级的子目录或归档文件（0=输入路径本身，1=直接子目录，以此类推）
+- 新增 `-c`/`--collect` 与 `-d`/`--depth` 的冲突校验，两者不可同时使用
+- 创建 `scripts/pre-commit.sh` 脚本，用于在 `git commit` 前执行格式化、测试和构建
+
+### Updated
+- 更新 `README.md`、命令行文档、使用示例和测试用例以覆盖新参数
+- 版本号升级到 2.3.0
+
 ## [2.2.0] - 2026-01-20
 ### Added
 - 解决了[issues#2 Can't convert to cbr](https://github.com/26350/convert-to-comic-book/issues/2)

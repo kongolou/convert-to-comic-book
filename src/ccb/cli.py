@@ -43,6 +43,12 @@ Examples:
   ccb -f cbz -t folder comic1.cbz comic2.zip
 
   ccb /path/to/source -o /dir/to/output -F
+
+  # Convert only immediate subdirectories/archives (depth 1)
+  ccb /path/to/root_folder -d 1
+
+  # Convert the root folder itself (depth 0)
+  ccb /path/to/source -d 0
         """,
     )
 
@@ -92,6 +98,14 @@ Examples:
         "--collect",
         action="store_true",
         help="Collect leaf sources under given paths, and use them as new input",
+    )
+
+    parser.add_argument(
+        "-d",
+        "--depth",
+        type=int,
+        default=None,
+        help="Only process directories or archives at the specified depth level relative to each input path (0=the path itself, 1=immediate subdirectories, ...)",
     )
 
     parser.add_argument(
@@ -184,6 +198,42 @@ def collect_sources(path: Path, exclude_to_type: Optional[str] = None) -> List[P
     return sources
 
 
+def collect_sources_by_depth(
+    path: Path, depth: int, current_depth: int = 0
+) -> List[Path]:
+    """
+    收集指定深度层级的目录或归档文件。
+
+    Args:
+        path: 搜索路径
+        depth: 目标深度，0表示当前路径本身，1表示直接子目录/文件
+        current_depth: 当前递归深度（内部使用）
+
+    Returns:
+        指定深度下的目录或归档文件列表
+    """
+    sources = []
+
+    if not path.exists():
+        logger.warning(f"Path does not exist: {path}")
+        return sources
+
+    if current_depth == depth:
+        if path.is_dir() or is_archive_file(path):
+            sources.append(path)
+        return sources
+
+    if current_depth < depth and path.is_dir():
+        try:
+            for item in path.iterdir():
+                sources.extend(collect_sources_by_depth(item, depth, current_depth + 1))
+        except (PermissionError, OSError) as e:
+            logger.warning(f"Error accessing directory {path}: {e}")
+            return sources
+
+    return sources
+
+
 async def convert_single(
     converter: ComicBookConverter,
     input_path: Path,
@@ -249,6 +299,12 @@ def process_paths(args: argparse.Namespace) -> None:
         logger.error("No input paths provided")
         return
 
+    if args.collect and args.depth is not None:
+        raise ComicBookError(
+            "Cannot use -c/--collect and -d/--depth at the same time. "
+            "Use one of them to discover sources."
+        )
+
     converter = ComicBookConverter()
     # 处理输出目录路径，移除可能的引号
     output_dir = Path(args.output_dir.strip("\"'")) if args.output_dir else None
@@ -293,8 +349,29 @@ def process_paths(args: argparse.Namespace) -> None:
                 continue
 
             if path.is_dir():
-                paths_to_process.append(path)
+                if args.depth is not None:
+                    depth_sources = collect_sources_by_depth(path, args.depth)
+                    if depth_sources:
+                        paths_to_process.extend(depth_sources)
+                        if not args.quiet:
+                            logger.info(
+                                f"Collected {len(depth_sources)} source(s) at depth "
+                                f"{args.depth} from: {path}"
+                            )
+                    else:
+                        if not args.quiet:
+                            logger.info(
+                                f"No sources found at depth {args.depth} in: {path}"
+                            )
+                else:
+                    paths_to_process.append(path)
             elif path.is_file():
+                if args.depth is not None and args.depth > 0:
+                    logger.warning(
+                        f"Skipping file {path} because depth {args.depth} > 0; "
+                        "files are only available at depth 0"
+                    )
+                    continue
                 paths_to_process.append(path)
             else:
                 logger.warning(

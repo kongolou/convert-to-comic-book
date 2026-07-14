@@ -59,7 +59,7 @@ def is_empty_directory(path: Path) -> bool:
     """
     if not path.is_dir():
         return False
-    
+
     return not any(path.iterdir())
 
 

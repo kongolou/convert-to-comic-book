@@ -33,6 +33,20 @@ ccb -t cbt /path/to/your/folder
 ccb /path/to/source -o /dir/to/output
 ```
 
+## 指定深度处理
+
+当传入一个目录时，使用 `-d` 参数只处理该目录下特定层级的子目录或归档文件：
+
+```bash
+# 仅处理根目录下的直接子目录/归档文件（第 1 层）
+ccb /path/to/root_folder -d 1
+
+# 仅处理根目录本身（第 0 层），与直接传入该目录效果相同
+ccb /path/to/root_folder -d 0
+```
+
+注意：`-d/--depth` 与 `-c/--collect` 不能同时使用。
+
 ## 查看帮助
 
 使用 `-h` 或 `--help` 查看完整的帮助信息：

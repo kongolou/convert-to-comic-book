@@ -371,8 +371,12 @@ class RarHandler(ArchiveHandler):
                     stderr=subprocess.PIPE,
                     timeout=timeout_sec,
                 )
-                out_s = completed.stdout.decode(errors="ignore") if completed.stdout else ""
-                err_s = completed.stderr.decode(errors="ignore") if completed.stderr else ""
+                out_s = (
+                    completed.stdout.decode(errors="ignore") if completed.stdout else ""
+                )
+                err_s = (
+                    completed.stderr.decode(errors="ignore") if completed.stderr else ""
+                )
                 return completed.returncode, out_s, err_s, False
             except subprocess.TimeoutExpired as e:
                 return -1, "", f"Timeout after {e.timeout}s", True
@@ -383,7 +387,9 @@ class RarHandler(ArchiveHandler):
         for cmd in cmds:
             rc, out, err, timed_out = _run(cmd)
             if rc == 0:
-                logger.debug(f"Compressed {source_path} to {archive_path} using external tool {cmd}")
+                logger.debug(
+                    f"Compressed {source_path} to {archive_path} using external tool {cmd}"
+                )
                 return
             # if timed out, raise immediately
             if timed_out:
@@ -392,7 +398,10 @@ class RarHandler(ArchiveHandler):
             last_err = err or out or last_err
 
         # all external attempts failed
-        msg = (last_err or f"external tool exited with non-zero code using {self._external_tool}").strip()
+        msg = (
+            last_err
+            or f"external tool exited with non-zero code using {self._external_tool}"
+        ).strip()
         raise ArchiveError(f"Failed to compress {source_path} to {archive_path}: {msg}")
 
     def is_valid(self, archive_path: Path) -> bool:

@@ -39,6 +39,9 @@ ccb /path/to/single_folder -R
 ccb -c /path/to/root_folder
 ccb -c /path/to/root_folder -R
 
+# 仅转换指定目录下第 1 层的子目录或归档文件
+ccb /path/to/root_folder -d 1
+
 # 指定多个 CBZ 转换为文件夹
 ccb -f cbz -t folder comic_book1.cbz comic_book2.cbz
 
@@ -89,6 +92,8 @@ ccb [可选参数] <源列表>
   -o, --output-dir OUTPUT_DIR
                         重定向导出目录（默认行为是导出到源所在目录）
   -c, --collect         搜集源列表中所有的叶文件或不含叶文件的叶目录，并作为新的源列表
+  -d DEPTH, --depth DEPTH
+                        仅处理从输入路径算起第 DEPTH 层的子目录或归档文件（0=输入路径本身，1=直接子目录，以此类推）
   -q, --quiet           静默模式，仅显示错误和摘要信息
   -R, --remove          处理完成后删除源列表中所有被转换的源
   -F, --force           强制替换同名的文件或目录（默认行为是覆盖）

@@ -6,16 +6,19 @@ import sys
 import asyncio
 import tempfile
 import argparse
+import pytest
 from unittest.mock import Mock
 from pathlib import Path
 
 from ccb.cli import (
     parse_args,
     collect_sources,
+    collect_sources_by_depth,
     convert_single,
     ComicBookConverter,
     process_paths,
 )
+from ccb.exceptions import ComicBookError
 import importlib
 
 
@@ -35,6 +38,8 @@ class TestCLI:
                 "-o",
                 "outdir",
                 "-c",
+                "-d",
+                "1",
                 "-q",
                 "-R",
                 "-F",
@@ -46,6 +51,7 @@ class TestCLI:
         assert args.to_type == "cbz"
         assert args.output_dir == "outdir"
         assert args.collect is True
+        assert args.depth == 1
         assert args.quiet is True
         assert args.remove is True
         assert args.force is True
@@ -93,6 +99,7 @@ class TestCLI:
             args.to_type = "cbz"
             args.output_dir = None
             args.collect = False
+            args.depth = None
             args.quiet = True
             args.remove = False
             args.force = False
@@ -105,3 +112,48 @@ class TestCLI:
             monkeypatch.setattr(module, "ComicBookConverter", lambda: mock_converter)
             # 调用 process_paths 不应抛异常
             process_paths(args)
+
+    def test_collect_sources_by_depth(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmp = Path(tmpdir)
+            root = tmp / "root"
+            root.mkdir()
+
+            # depth 0: root itself
+            assert collect_sources_by_depth(root, 0) == [root]
+
+            # depth 1: direct children
+            child_dir = root / "child_dir"
+            child_dir.mkdir()
+            child_archive = root / "child.cbz"
+            child_archive.touch()
+            depth1 = collect_sources_by_depth(root, 1)
+            assert child_dir in depth1
+            assert child_archive in depth1
+
+            # depth 2: grandchild
+            grandchild = child_dir / "grandchild"
+            grandchild.mkdir()
+            depth2 = collect_sources_by_depth(root, 2)
+            assert grandchild in depth2
+            assert child_dir not in depth2
+
+    def test_collect_and_depth_conflict(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmp = Path(tmpdir)
+            target = tmp / "target"
+            target.mkdir()
+
+            args = argparse.Namespace()
+            args.paths = [str(target)]
+            args.from_type = "auto"
+            args.to_type = "cbz"
+            args.output_dir = None
+            args.collect = True
+            args.depth = 1
+            args.quiet = True
+            args.remove = False
+            args.force = False
+
+            with pytest.raises(ComicBookError):
+                process_paths(args)

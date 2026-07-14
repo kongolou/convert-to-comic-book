@@ -77,7 +77,7 @@ class ComicBookConverter:
         if input_type == output_type:
             logger.info(f"Input and output types are the same, skipping conversion")
             return input_path
-            
+
         # 如果输入为空目录，直接返回
         if input_type == "folder" and is_empty_directory(input_path):
             logger.info(f"{input_path} is empty, skipping conversion")

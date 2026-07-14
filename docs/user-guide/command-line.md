@@ -2,7 +2,7 @@
 
 通过 `ccb -h` 或 `ccb --help` 获取完整的帮助信息如下：
 ```
-usage: ccb [-h] [-f {auto,folder,cbz,cbr,cb7,cbt,zip,rar,7z,tar}] [-t {folder,cbz,cbr,cb7,cbt}] [-o OUTPUT_DIR] [-c]
+usage: ccb [-h] [-f {auto,folder,cbz,cbr,cb7,cbt,zip,rar,7z,tar}] [-t {folder,cbz,cbr,cb7,cbt}] [-o OUTPUT_DIR] [-c] [-d DEPTH]
            [-q] [-R] [-F] [-v]
            [paths ...]
 
@@ -20,6 +20,8 @@ options:
   -o, --output-dir OUTPUT_DIR
                         Output directory (default: source directory)
   -c, --collect         Collect leaf sources under given paths, and use them as new input
+  -d DEPTH, --depth DEPTH
+                        Only process directories or archives at the specified depth level relative to each input path (0=the path itself, 1=immediate subdirectories, ...)
   -q, --quiet           Quiet mode: show only errors
   -R, --remove          Remove sources after processing (excluding already matching targets)
   -F, --force           Force replace existing targets
@@ -38,4 +40,10 @@ Examples:
   ccb -f cbz -t folder comic1.cbz comic2.zip
 
   ccb /path/to/source -o /dir/to/output -F
+
+  # Convert only immediate subdirectories/archives (depth 1)
+  ccb /path/to/root_folder -d 1
+
+  # Convert the source folder itself (depth 0)
+  ccb /path/to/source -d 0
 ```

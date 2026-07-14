@@ -62,3 +62,12 @@ ccb -c ~ -R -q
 └── my_favorites
     └── awesome one.cbz
 ```
+
+## 示例 6：按深度处理目录
+
+```bash
+# 仅转换 comic_books 下的直接子目录/文件（第 1 层）
+ccb -d 1 ~/comic_books
+# 输出：~/comic_books/comic_book2.cbz
+# 注意：comic_book1.zip 和 comic_book3 目录也会被处理（如果存在），但不会递归进入 comic_book3 的子目录
+```
