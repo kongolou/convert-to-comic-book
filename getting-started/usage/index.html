@@ -25,7 +25,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
@@ -583,7 +583,7 @@
   <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        查看帮助
+        指定深度处理
       
     </span>
   </a>
@@ -592,6 +592,17 @@
       
         <li class="md-nav__item">
   <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        查看帮助
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         下一步
@@ -997,7 +1008,7 @@
   <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        查看帮助
+        指定深度处理
       
     </span>
   </a>
@@ -1006,6 +1017,17 @@
       
         <li class="md-nav__item">
   <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        查看帮助
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         下一步
@@ -1056,11 +1078,20 @@
 <p>使用 <code>-o</code> 参数指定输出目录：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>ccb<span class="w"> </span>/path/to/source<span class="w"> </span>-o<span class="w"> </span>/dir/to/output
 </code></pre></div>
-<h2 id="_5">查看帮助<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
-<p>使用 <code>-h</code> 或 <code>--help</code> 查看完整的帮助信息：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>ccb<span class="w"> </span>-h
+<h2 id="_5">指定深度处理<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<p>当传入一个目录时，使用 <code>-d</code> 参数只处理该目录下特定层级的子目录或归档文件：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># 仅处理根目录下的直接子目录/归档文件（第 1 层）</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>ccb<span class="w"> </span>/path/to/root_folder<span class="w"> </span>-d<span class="w"> </span><span class="m">1</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># 仅处理根目录本身（第 0 层），与直接传入该目录效果相同</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>ccb<span class="w"> </span>/path/to/root_folder<span class="w"> </span>-d<span class="w"> </span><span class="m">0</span>
 </code></pre></div>
-<h2 id="_6">下一步<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<p>注意：<code>-d/--depth</code> 与 <code>-c/--collect</code> 不能同时使用。</p>
+<h2 id="_6">查看帮助<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<p>使用 <code>-h</code> 或 <code>--help</code> 查看完整的帮助信息：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>ccb<span class="w"> </span>-h
+</code></pre></div>
+<h2 id="_7">下一步<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
 <p>查看<a href="../examples/">使用示例</a>了解更多高级用法。</p>
 
 
